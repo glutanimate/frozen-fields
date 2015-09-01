@@ -1,3 +1,5 @@
+# Frozen Fields add-on for Anki
+
 # Snowflake Icon
 icon_name = "flake"
 min_width = "28"
@@ -6,12 +8,10 @@ min_width = "28"
 #icon_name = "frozen_26x28"
 #min_width = "28"
 
-from aqt import mw
-from aqt import editor
-from anki.hooks import wrap
-
+from aqt import mw, editor
+from aqt.qt import *
+from anki.hooks import wrap, addHook
 from anki.utils import json
-
 import os
 
 def addons_folder(): return mw.pm.addonFolder()
@@ -68,7 +68,6 @@ function setFrozenFields(fields, frozen, focusTo) {
 };
 """
 
-
 def myLoadNote(self):
     self.web.eval(js_code)
     if self.stealFocus:
@@ -105,5 +104,18 @@ def myBridge(self, str):
         model['flds'][field_nr]['sticky'] = not is_sticky
         self.loadNote()
 
+def toggleFrozen(editor):
+    myField = str(editor.currentField)
+    editor.web.eval("""py.run("frozen:""" + myField + """");""")
+    editor.loadNote()
+
+def onSetupButtons(editor):
+    # insert custom key sequence here:
+    # e.g. QKeySequence(Qt.ALT + Qt.SHIFT + Qt.Key_F) for Alt+Shift+F
+    s = QShortcut(QKeySequence("F9"), editor.parentWindow)
+    s.connect(s, SIGNAL("activated()"),
+              lambda : toggleFrozen(editor))
+
+addHook("setupEditorButtons", onSetupButtons)
 editor.Editor.loadNote = myLoadNote
 editor.Editor.bridge = wrap(editor.Editor.bridge, myBridge, 'before')
