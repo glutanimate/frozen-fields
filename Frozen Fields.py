@@ -104,17 +104,30 @@ def myBridge(self, str):
         model['flds'][field_nr]['sticky'] = not is_sticky
         self.loadNote()
 
+def resetFrozen(editor):
+    flds = editor.note.model()['flds']
+    for n in range(len(editor.note.fields)):
+        try:
+            if  flds[n]['sticky']:
+                flds[n]['sticky'] = not flds[n]['sticky']
+        except IndexError:
+            break
+    editor.loadNote()
+
 def toggleFrozen(editor):
     myField = str(editor.currentField)
     editor.web.eval("""py.run("frozen:""" + myField + """");""")
     editor.loadNote()
 
 def onSetupButtons(editor):
-    # insert custom key sequence here:
+    # insert custom key sequences here:
     # e.g. QKeySequence(Qt.ALT + Qt.SHIFT + Qt.Key_F) for Alt+Shift+F
     s = QShortcut(QKeySequence("F9"), editor.parentWindow)
     s.connect(s, SIGNAL("activated()"),
               lambda : toggleFrozen(editor))
+    t = QShortcut(QKeySequence("F10"), editor.parentWindow)
+    t.connect(t, SIGNAL("activated()"),
+              lambda : resetFrozen(editor))
 
 addHook("setupEditorButtons", onSetupButtons)
 editor.Editor.loadNote = myLoadNote
