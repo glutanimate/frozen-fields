@@ -122,10 +122,10 @@ def toggleFrozen(editor):
 def onSetupButtons(editor):
     # insert custom key sequences here:
     # e.g. QKeySequence(Qt.ALT + Qt.SHIFT + Qt.Key_F) for Alt+Shift+F
-    s = QShortcut(QKeySequence("F9"), editor.parentWindow)
+    s = QShortcut(QKeySequence(Qt.Key_F9), editor.parentWindow)
     s.connect(s, SIGNAL("activated()"),
               lambda : toggleFrozen(editor))
-    t = QShortcut(QKeySequence("F10"), editor.parentWindow)
+    t = QShortcut(QKeySequence(Qt.SHIFT + Qt.Key_F9), editor.parentWindow)
     t.connect(t, SIGNAL("activated()"),
               lambda : resetFrozen(editor))
 
