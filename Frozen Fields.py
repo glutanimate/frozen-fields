@@ -105,6 +105,7 @@ def myBridge(self, str):
         self.loadNote()
 
 def resetFrozen(editor):
+    myField = editor.currentField
     flds = editor.note.model()['flds']
     for n in range(len(editor.note.fields)):
         try:
@@ -113,11 +114,16 @@ def resetFrozen(editor):
         except IndexError:
             break
     editor.loadNote()
+    editor.web.eval("focusField(%d);" % myField)
 
 def toggleFrozen(editor):
-    myField = str(editor.currentField)
-    editor.web.eval("""py.run("frozen:""" + myField + """");""")
+    # myField = editor.currentField
+    # flds = editor.note.model()['flds']
+    # flds[myField]['sticky'] = not flds[myField]['sticky']
+    myField = editor.currentField
+    editor.web.eval("""py.run("frozen:%d");""" % myField)
     editor.loadNote()
+    editor.web.eval("focusField(%d);" % myField)
 
 def onSetupButtons(editor):
     # insert custom key sequences here:
