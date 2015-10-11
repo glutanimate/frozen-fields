@@ -2,7 +2,11 @@
 
 **Overview**
 
-The Frozen Fields add-on makes it possible to conveniently sticky and unsticky a field right from the note editor. This is a fork of the eponymous [add-on by tmbb](https://github.com/tmbb/FrozenFields).
+*Frozen Fields* allows you to conveniently sticky and unsticky a field right from the note editor:
+
+![screenshot of snow-flake buttons](https://raw.githubusercontent.com/Glutanimate/FrozenFields/master/screenshot.png)
+
+This is a fork of the eponymous [add-on by tmbb](https://github.com/tmbb/FrozenFields).
 
 New in this release are a number of shortcuts for controlling the state of your fields:
 
