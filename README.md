@@ -1,8 +1,8 @@
-## Frozen Fields Navigation Add-on for Anki
+## Frozen Fields Add-on for Anki
 
 **Overview**
 
-This is a fork of the [Frozen Fields add-on for Anki by tmbb](https://github.com/tmbb/FrozenFields). Frozen Fields adds snowflake icons to the editor that allow you to conveniently "freeze" and "unfreeze" each field across multiple notes.
+The Frozen Fields add-on makes it possible to conveniently sticky and unsticky a field right from the note editor. This is a fork of the [Frozen Fields add-on for Anki by tmbb](https://github.com/tmbb/FrozenFields).
 
 New in this release are a number of shortcuts for controlling the state of your fields:
 
@@ -32,6 +32,7 @@ The add-on's source code is available on [Github](https://github.com/Glutanimate
 **License**
 
 *Copyright 2012* [tmbb](https://github.com/tmbb)
+
 *Copyright 2015 [Glutanimate](https://github.com/Glutanimate)*
 
 Quick Field Navigation add-on for Anki is licensed under the [GNU GPLv3](http://www.gnu.de/documents/gpl-3.0.en.html).
