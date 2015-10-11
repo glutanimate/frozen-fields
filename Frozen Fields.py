@@ -1,4 +1,10 @@
 # Frozen Fields add-on for Anki
+# 
+# Original author: tmbb (https://github.com/tmbb)
+# This version by: Glutanimate (https://github.com/Glutanimate)
+#
+# Modifications:
+#  - added hotkeys for various actions
 
 # Snowflake Icon
 icon_name = "flake"
