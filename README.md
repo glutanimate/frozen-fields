@@ -39,4 +39,4 @@ The add-on's source code is available on [Github](https://github.com/Glutanimate
 
 *Copyright 2015 [Glutanimate](https://github.com/Glutanimate)*
 
-Frozen Fields add-on for Anki is licensed under the [GNU GPLv3](http://www.gnu.de/documents/gpl-3.0.en.html).
+Frozen Fields add-on for Anki is licensed under the simplified BSD license.
