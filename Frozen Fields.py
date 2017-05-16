@@ -142,10 +142,11 @@ def frozenToggle(self):
 
 def onSetupButtons(self):
     """Set up hotkeys"""
-    s = QShortcut(QKeySequence(hotkey_toggle_field), self.parentWindow,
-        activated=self.frozenToggle)
-    s = QShortcut(QKeySequence(hotkey_toggle_all), self.parentWindow,
-        activated=self.frozenToggleAll)
+    if isinstance(self.parentWindow, AddCards): # only modify AddCards Editor
+        s = QShortcut(QKeySequence(hotkey_toggle_field), self.parentWindow,
+            activated=self.frozenToggle)
+        s = QShortcut(QKeySequence(hotkey_toggle_all), self.parentWindow,
+            activated=self.frozenToggleAll)
 
 # Add-on hooks, etc.
 
