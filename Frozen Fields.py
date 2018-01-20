@@ -106,7 +106,7 @@ def myLoadNote(self):
     self.widget.show()
     if self.stealFocus:
         self.web.setFocus()
-        self.stealFocus = False
+        # self.stealFocus = False
 
 def myBridge(self, str):
     """Extends the js<->py bridge with our py.link command"""
