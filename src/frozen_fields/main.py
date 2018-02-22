@@ -96,13 +96,13 @@ function setFrozenFields(fields, frozen) {
         if (!f) {
             f = "<br>";
         }
-        txt += "<tr><td style='min-width: 28'></td><td class=fname>{0}</td></tr><tr>".format(n);
+        txt += "<tr><td style='width:28px'></td><td class=fname>{0}</td></tr><tr>".format(n);
         
         if (frozen[i]) {
-            txt += "<td style='min-width: 28'><div id=i{0} title='Unfreeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
+            txt += "<td style='width:28px'><div id=i{0} title='Unfreeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
         }
         else {
-            txt += "<td style='min-width: 28'><div id=i{0} title='Freeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
+            txt += "<td style='width:28px'><div id=i{0} title='Freeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
         }
         
         txt += "<td width=100%%>"
