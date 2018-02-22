@@ -33,10 +33,12 @@ from anki.utils import json
 from .consts import *
 
 icon_path = os.path.join(addon_path, "icons")
-icon_frozen = QUrl.fromLocalFile(
-    os.path.join(icon_path, "frozen.png")).toString()
-icon_unfrozen = QUrl.fromLocalFile(
-    os.path.join(icon_path, "unfrozen.png")).toString()
+
+icon_path_frozen = os.path.join(icon_path, "frozen.png")
+icon_path_unfrozen = os.path.join(icon_path, "unfrozen.png")
+
+icon_frozen = QUrl.fromLocalFile(icon_path_frozen).toString()
+icon_unfrozen = QUrl.fromLocalFile(icon_path_unfrozen).toString()
 
 
 
@@ -114,9 +116,7 @@ function setFrozenFields(fields, frozen) {
     }
     $("#fields").html("<table cellpadding=0 width=100%% style='table-layout: fixed;'>" + txt + "</table>");
     maybeDisableButtons();
-
-setFrozenFields(%s, %s); setFonts(%s); focusField(%s)
-};
+}
 
 """
 
@@ -175,6 +175,20 @@ def loadNote21(self, focusTo=None):
             self.web.setFocus()
         runHook("loadNote", self)
 
+    def onjscallback(arg):
+        if not self.note:
+            return
+
+        flds = self.note.model()["flds"]
+        sticky = [fld["sticky"] for fld in flds]
+        
+        evaljs = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s)" % (
+                               json.dumps(data), json.dumps(sticky),
+                               json.dumps(self.fonts()),
+                               json.dumps(focusTo))
+
+        self.web.evalWithCallback(evaljs, oncallback)
+
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
         print("Not Addcards instance")
@@ -183,16 +197,13 @@ def loadNote21(self, focusTo=None):
             json.dumps(self.fonts()), json.dumps(focusTo)),
                                   oncallback)
     else:
-        flds = self.note.model()["flds"]
-        sticky = [fld["sticky"] for fld in flds]
-        evaljs = js_code_21 % (hotkey_toggle_field, icon_frozen,
-                                                hotkey_toggle_field, icon_unfrozen,
-                                                json.dumps(data), json.dumps(sticky),
-                                                json.dumps(self.fonts()),
-                                                json.dumps(focusTo))
-        print(evaljs)
-        self.web.evalWithCallback(evaljs,
-                                  oncallback)
+        iconstr_frozen = self.resourceToData(icon_path_frozen)
+        iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
+
+        eval_functions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
+                                       hotkey_toggle_field, iconstr_unfrozen)
+        
+        self.web.evalWithCallback(eval_functions, onjscallback)
 
 
 def myBridge(self, str, _old):
