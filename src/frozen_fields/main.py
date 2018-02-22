@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
 """
-Frozen Fields Add-on for Anki
+This file is part of the Frozen Fields add-on for Anki.
 
-Allows you to conveniently sticky and unsticky a field right
-from the note editor. Sticky fields are preserved when 
-switching to a new note.
+Main Module, hooks add-on methods into Anki.
 
-Copyright: (c) 2012-2015 Tiago Barroso (https://github.com/tmbb)
-           (c) 2015-2017 Glutanimate (https://github.com/Glutanimate)
+Copyright: (c) 2012-2015 Tiago Barroso <https://github.com/tmbb>
+           (c) 2015-2018 Glutanimate <https://glutanimate.com/>
 
-License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.html
+License: GNU AGPLv3 <https://www.gnu.org/licenses/agpl.html>
 """
 
 ##### USER CONFIGURATION START ######
