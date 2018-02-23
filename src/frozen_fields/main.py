@@ -164,7 +164,7 @@ def loadNote21(self, focusTo=None):
     self.widget.show()
     self.updateTags()
 
-    def oncallback(arg):
+    def onSetFieldsCallback(arg):
         if not self.note:
             return
         self.setupForegroundButton()
@@ -173,7 +173,7 @@ def loadNote21(self, focusTo=None):
             self.web.setFocus()
         runHook("loadNote", self)
 
-    def onjscallback(arg):
+    def onFctEvalCallback(arg):
         if not self.note:
             return
 
@@ -185,7 +185,7 @@ def loadNote21(self, focusTo=None):
             json.dumps(self.fonts()),
             json.dumps(focusTo))
 
-        self.web.evalWithCallback(evaljs, oncallback)
+        self.web.evalWithCallback(evaljs, onSetFieldsCallback)
 
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
@@ -200,7 +200,7 @@ def loadNote21(self, focusTo=None):
         eval_functions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
                                        hotkey_toggle_field, iconstr_unfrozen)
 
-        self.web.evalWithCallback(eval_functions, onjscallback)
+        self.web.evalWithCallback(eval_functions, onFctEvalCallback)
 
 
 def onBridge(self, str, _old):
@@ -236,9 +236,7 @@ def frozenToggle(self, batch=False):
     is_sticky = flds[cur]["sticky"]
     if not batch:
         flds[cur]["sticky"] = not is_sticky
-        self.web.eval("saveField('key');")
     else:
-        self.web.eval("saveField('key');")
         for n in range(len(self.note.fields)):
             try:
                 flds[n]['sticky'] = not is_sticky
@@ -248,7 +246,11 @@ def frozenToggle(self, batch=False):
     if anki21:
         self.loadNoteKeepingFocus()
     else:
+        self.web.eval("saveField('key');")
         self.loadNote()
+
+def onFrozenToggle21(self, batch=False):
+    self.web.evalWithCallback("saveField('key');", lambda _: self.frozenToggle(batch=batch))
 
 
 def onSetupButtons20(self):
@@ -263,8 +265,8 @@ def onSetupButtons20(self):
 
 
 def onSetupShortcuts21(cuts, self):
-    cuts += [(hotkey_toggle_field, self.frozenToggle),
-             (hotkey_toggle_all, lambda: self.frozenToggle(batch=True), True)]
+    cuts += [(hotkey_toggle_field, self.onFrozenToggle),
+             (hotkey_toggle_all, lambda: self.onFrozenToggle(batch=True), True)]
     # third value: enable shortcut even when no field selected
 
 # Add-on hooks, etc.
@@ -274,6 +276,7 @@ if anki21:
     addHook("setupEditorShortcuts", onSetupShortcuts21)
     Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
     Editor.loadNote = loadNote21
+    Editor.onFrozenToggle = onFrozenToggle21
 else:
     addHook("setupEditorButtons", onSetupButtons20)
     Editor.bridge = wrap(Editor.bridge, onBridge, 'around')
