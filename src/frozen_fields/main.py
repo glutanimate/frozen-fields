@@ -25,7 +25,6 @@ from aqt.qt import *
 
 from aqt.editor import Editor
 from aqt.addcards import AddCards
-from aqt.utils import tooltip
 
 from anki.hooks import wrap, addHook, runHook
 from anki.utils import json

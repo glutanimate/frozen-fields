@@ -1,7 +1,7 @@
 
 *Frozen Fields* allows you to conveniently **sticky and unsticky a field** right from the note editor:
 
-![screenshot of snow-flake buttons](https://raw.githubusercontent.com/glutanimate/frozen-fields/master/screenshots/screenshot.png)
+![screenshot of snow-flake buttons](https://raw.githubusercontent.com/glutanimate/frozen-fields/blob/master/screenshots/screenshot.png)
 
 **OVERVIEW**
 
@@ -41,7 +41,7 @@ Please **do not report issues or bugs in the review section below**. I can't rep
 *Copyright © 2012-2015 [Tiago Barroso](https://github.com/tmbb)*
 *Copyright (c) 2015-2018 [Aristotelis P.](https://glutanimate.com/)*
 
-*Frozen Fields* is the brainchild of Tiago Barroso. All credit for this incredible addition to the Anki add-on system goes to him.
+*Frozen Fields* is the brainchild of Tiago Barroso. All credit for coming up with this fantastic add-on goes to him.
 
 This fork and update to Anki 2.1 was made possible through the kind support of a fellow Anki user.
 

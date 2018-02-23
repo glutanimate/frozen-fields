@@ -16,7 +16,7 @@
 
 ### Screenshots
 
-![screenshot of snow-flake buttons](https://raw.githubusercontent.com/glutanimate/frozen-fields/master/screenshot.png)
+![screenshot of snow-flake buttons](https://raw.githubusercontent.com/glutanimate/frozen-fields/blob/master/screenshots/screenshot.png)
 
 ### Installation
 
@@ -55,7 +55,7 @@ For further information on the use of this add-on please check out [the original
 
 *Copyright © 2015-2018 [Aristotelis P.](https://glutanimate.com/)*
 
-*Frozen Fields* is the brainchild of Tiago Barroso. All credit for this incredible addition to the Anki add-on system goes to him.
+*Frozen Fields* is the brainchild of Tiago Barroso. All credit for coming up with this fantastic add-on goes to him.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](https://www.gnu.org/licenses/agpl.html) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. 
 
