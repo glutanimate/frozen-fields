@@ -16,7 +16,7 @@
 
 ### Screenshots
 
-![screenshot of snow-flake buttons](https://raw.githubusercontent.com/glutanimate/frozen-fields/blob/master/screenshots/screenshot.png)
+![screenshot of snow-flake buttons](screenshots/screenshot.png)
 
 ### Installation
 
