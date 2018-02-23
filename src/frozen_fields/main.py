@@ -41,7 +41,6 @@ icon_frozen = QUrl.fromLocalFile(icon_path_frozen).toString()
 icon_unfrozen = QUrl.fromLocalFile(icon_path_unfrozen).toString()
 
 
-
 js_code_20 = """
 function onFrozen(elem) {
     currentField = elem;
@@ -121,7 +120,7 @@ function setFrozenFields(fields, frozen) {
 """
 
 
-def myLoadNote(self):
+def loadNote20(self):
     """Modified loadNote(), adds buttons to Editor"""
     if not self.note:
         return
@@ -155,7 +154,6 @@ def myLoadNote(self):
         # self.stealFocus = False
 
 
-
 def loadNote21(self, focusTo=None):
     if not self.note:
         return
@@ -181,55 +179,60 @@ def loadNote21(self, focusTo=None):
 
         flds = self.note.model()["flds"]
         sticky = [fld["sticky"] for fld in flds]
-        
+
         evaljs = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s)" % (
-                               json.dumps(data), json.dumps(sticky),
-                               json.dumps(self.fonts()),
-                               json.dumps(focusTo))
+            json.dumps(data), json.dumps(sticky),
+            json.dumps(self.fonts()),
+            json.dumps(focusTo))
 
         self.web.evalWithCallback(evaljs, oncallback)
 
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
-        print("Not Addcards instance")
         self.web.evalWithCallback("setFields(%s); setFonts(%s); focusField(%s)" % (
             json.dumps(data),
             json.dumps(self.fonts()), json.dumps(focusTo)),
-                                  oncallback)
+            oncallback)
     else:
         iconstr_frozen = self.resourceToData(icon_path_frozen)
         iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
 
         eval_functions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
                                        hotkey_toggle_field, iconstr_unfrozen)
-        
+
         self.web.evalWithCallback(eval_functions, onjscallback)
 
 
-def myBridge(self, str, _old):
-    """Extends the js<->py bridge with our py command"""
+def onBridge(self, str, _old):
+    """Extends the js<->py bridge with our pycmd handler"""
+    
     if not str.startswith("frozen"):
+        if anki21 and str.startswith("blur"):
+            self.lastField = self.currentField  # save old focus
         return _old(self, str)
     if not self.note or not runHook:
         # shutdown
         return
-    
+
     (cmd, txt) = str.split(":", 1)
     cur = int(txt)
     flds = self.note.model()['flds']
     flds[cur]['sticky'] = not flds[cur]['sticky']
-    
+
     if anki21:
-        self.loadNoteKeepingFocus()
+        # load and restore old focus
+        self.loadNote(focusTo=getattr(self, "lastField", None))
     else:
         self.loadNote()
 
 
 def frozenToggle(self, batch=False):
     """Toggle state of current field"""
-    tooltip("frozenToggle")
-    cur = self.currentField
+
     flds = self.note.model()['flds']
+    cur = self.currentField
+    if cur is None:
+        cur = 0
     is_sticky = flds[cur]["sticky"]
     if not batch:
         flds[cur]["sticky"] = not is_sticky
@@ -241,8 +244,11 @@ def frozenToggle(self, batch=False):
                 flds[n]['sticky'] = not is_sticky
             except IndexError:
                 break
-    self.loadNote()
-    self.web.eval("focusField(%d);" % cur)
+
+    if anki21:
+        self.loadNoteKeepingFocus()
+    else:
+        self.loadNote()
 
 
 def onSetupButtons20(self):
@@ -258,18 +264,19 @@ def onSetupButtons20(self):
 
 def onSetupShortcuts21(cuts, self):
     cuts += [(hotkey_toggle_field, self.frozenToggle),
-             (hotkey_toggle_all, lambda: self.frozenToggle(batch=True))]
+             (hotkey_toggle_all, lambda: self.frozenToggle(batch=True), True)]
+    # third value: enable shortcut even when no field selected
 
 # Add-on hooks, etc.
 
+
 if anki21:
     addHook("setupEditorShortcuts", onSetupShortcuts21)
-    Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, myBridge, "around")
+    Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
     Editor.loadNote = loadNote21
 else:
-    addHook("setupEditorButtons", onSetupButtons)
-    Editor.bridge = wrap(Editor.bridge, myBridge, 'around')
-    Editor.loadNote = myLoadNote
+    addHook("setupEditorButtons", onSetupButtons20)
+    Editor.bridge = wrap(Editor.bridge, onBridge, 'around')
+    Editor.loadNote = loadNote20
 
 Editor.frozenToggle = frozenToggle
-
