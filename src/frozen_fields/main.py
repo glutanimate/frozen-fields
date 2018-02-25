@@ -11,13 +11,6 @@ Copyright: (c) 2012-2015 Tiago Barroso <https://github.com/tmbb>
 License: GNU AGPLv3 <https://www.gnu.org/licenses/agpl.html>
 """
 
-##### USER CONFIGURATION START ######
-
-hotkey_toggle_field = "F9"  # Toggle status for current field
-hotkey_toggle_all = "Shift+F9"  # Toggle status for all fields
-
-##### USER CONFIGURATION END ######
-
 
 import os
 
@@ -30,6 +23,7 @@ from anki.hooks import wrap, addHook, runHook
 from anki.utils import json
 
 from .consts import *
+from .config import local_conf
 
 icon_path = os.path.join(addon_path, "icons")
 
@@ -38,6 +32,9 @@ icon_path_unfrozen = os.path.join(icon_path, "unfrozen.png")
 
 icon_frozen = QUrl.fromLocalFile(icon_path_frozen).toString()
 icon_unfrozen = QUrl.fromLocalFile(icon_path_unfrozen).toString()
+
+hotkey_toggle_field = local_conf["hotkeyOne"]
+hotkey_toggle_all = local_conf["hotkeyAll"]
 
 
 js_code_20 = """
@@ -163,7 +160,7 @@ def loadNote21(self, focusTo=None):
     self.widget.show()
     self.updateTags()
 
-    def onSetFieldsCallback(arg):
+    def oncallback(arg):
         if not self.note:
             return
         self.setupForegroundButton()
@@ -171,20 +168,6 @@ def loadNote21(self, focusTo=None):
         if focusTo is not None:
             self.web.setFocus()
         runHook("loadNote", self)
-
-    def onFctEvalCallback(arg):
-        if not self.note:
-            return
-
-        flds = self.note.model()["flds"]
-        sticky = [fld["sticky"] for fld in flds]
-
-        evaljs = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s)" % (
-            json.dumps(data), json.dumps(sticky),
-            json.dumps(self.fonts()),
-            json.dumps(focusTo))
-
-        self.web.evalWithCallback(evaljs, onSetFieldsCallback)
 
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
@@ -196,10 +179,19 @@ def loadNote21(self, focusTo=None):
         iconstr_frozen = self.resourceToData(icon_path_frozen)
         iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
 
-        eval_functions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
+        flds = self.note.model()["flds"]
+        sticky = [fld["sticky"] for fld in flds]
+
+        eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
                                        hotkey_toggle_field, iconstr_unfrozen)
 
-        self.web.evalWithCallback(eval_functions, onFctEvalCallback)
+        eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s)" % (
+            json.dumps(data), json.dumps(sticky),
+            json.dumps(self.fonts()),
+            json.dumps(focusTo))
+
+        self.web.eval(eval_definitions)
+        self.web.evalWithCallback(eval_calls, oncallback)
 
 
 def onBridge(self, str, _old):

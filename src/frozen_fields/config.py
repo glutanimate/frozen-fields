@@ -122,3 +122,4 @@ else:
 
         _writeAddonMeta({"config": config})
 
+local_conf = getConfig()
