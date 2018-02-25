@@ -57,6 +57,8 @@ For further information on the use of this add-on please check out [the original
 
 *Frozen Fields* is the brainchild of Tiago Barroso. All credit for coming up with this fantastic add-on goes to him.
 
+The present fork and update to Anki 2.1 was made possible through the kind support of a fellow Anki user who would like to remain anonymous.
+
 This program is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](https://www.gnu.org/licenses/agpl.html) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. 
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.

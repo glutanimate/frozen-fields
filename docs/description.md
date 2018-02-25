@@ -11,26 +11,42 @@ Unfortunaly, marking a field as sticky is quite complex and breaks your workflow
 
 To freeze/unfreeze a field, just **click the adjacent snowflake** or use the corresponding **hotkey** (`F9` by default). A blue snowflake means that the field is frozen and a grey snowflake means that the field is unfrozen.
 
-**COMPATIBILITY**
-
-Initial tests have shown this add-on to both work on Anki 2.0 and Anki 2.1. However, as the Anki 2.1 release line is still in beta, I cannot provide any kind of official support for this platform. **Please do not report issues with Anki 2.1 in the review section below**. Instead, please report all issues you encounter on [GitHub](https://github.com/glutanimate/frozen-fields/issues).
-
 **HOTKEYS**
 
 - `F9`: toggle field between frozen and unfrozen
 - `Shift + F9`: toggle status for all fields
 
+**RELEASE LOG**
+
+- 2018-02-??: **v2.0.0** – Refactored code-base, transitioned to Anki 2.1, added config file
+- 2018-01-20: Fixed snowflake icon being pasted into fields under some circumstances (thanks to [Dmitry](https://github.com/ankitest/)!)
+- 2017-03-20: Refactored code-base, added hotkey for toggling all fields
+- 2015-10-11: Added hotkeys
+- 2012: **v1.0.0**? – Initial release by Tiago Barroso
+
+**LATEST CHANGES AND NEWS**
+
+*2018-02-??* **v2.0.0**
+
+This is the first public release of my fork of Tiago Barroso's *Frozen Fields* add-on. I would like to extend my heartfelt gratitude to all of what he has done for the Anki community over the years.
+
+This update is meant to carry on his legacy by adding Anki 2.1 support, refactoring some parts of the codebase, and fixing a few smaller issues. All of this was made possible through the generous support of a fellow Anki user who would like to remain anonymous.
+
+An overview of the most important changes in this release follows below:
+
+- **New**: Anki 2.1 compatibility
+- **New**: Hotkey for toggling all fields (default: `Shift+F9`)
+- **New**: Configurable hotkeys
+- **Changed**: Field toggles only appear when adding notes (having them available in the browser or while editing cards didn't make much sense)
+- **Fixed**: Fix rare instances of snowflake icon being pasted into fields (thanks to [Dmitry Mikheev](https://github.com/ankitest/)!)
+
+**COMPATIBILITY**
+
+Initial tests have shown this add-on to both work on Anki 2.0 and Anki 2.1. However, as the Anki 2.1 release line is still in beta, I cannot provide any kind of official support for this platform. **Please do not report issues with Anki 2.1 in the review section below**. Instead, please report all issues you encounter on [GitHub](https://github.com/glutanimate/frozen-fields/issues).
+
 **CONFIGURATION**
 
-The hotkeys can be customized by either using Anki 2.1's inbuilt add-on configuration screen, or by manually editing the corresponding config keys in `frozen_fields/meta.json` in Anki's add-on folder (Anki 2.0).
-
-**CHANGELOG**
-
-2018-02-? – Refactored code-base, transitioned to Anki 2.1, added config file
-2018-01-20 – Fix snowflake icon being pasted into fields under some circumstances (thanks to [Dmitry](https://github.com/ankitest/)!)
-2017-03-20 – Refactored code-base, added hotkey for toggling all fields
-2015-10-11 – Added hotkeys
-2012 – Original add-on release
+The hotkeys can be customized by either using Anki 2.1's inbuilt add-on configuration screen (*Tools* → *Add-ons* → select *Frozen Fields* → click on *Config*), or by manually editing the corresponding config keys in `frozen_fields/meta.json` in Anki's add-on folder (Anki 2.0) [the config.json file contains the default values and **should not be modified**.].
 
 **SUPPORT**
 
@@ -39,11 +55,11 @@ Please **do not report issues or bugs in the review section below**. I can't rep
 **CREDITS AND LICENSE**
 
 *Copyright © 2012-2015 [Tiago Barroso](https://github.com/tmbb)*
-*Copyright (c) 2015-2018 [Aristotelis P.](https://glutanimate.com/)*
+*Copyright © 2015-2018 [Aristotelis P.](https://glutanimate.com/)*
 
-*Frozen Fields* is the brainchild of Tiago Barroso. All credit for coming up with this fantastic add-on goes to him.
+This add-on is based on [*Frozen Fields*](https://github.com/tmbb/FrozenFields) by [Tiago Barroso](https://github.com/tmbb). All credit for the original idea and implementation goes to him.
 
-This fork and update to Anki 2.1 was made possible through the kind support of a fellow Anki user.
+The present fork and update to Anki 2.1 was made possible through the generous support of a fellow Anki user who would like to remain anonymous.
 
 Licensed under the [GNU AGPLv3](https://www.gnu.org/licenses/agpl.html). The code for this add-on is available on [![GitHub icon](https://glutanimate.com/logos/github.svg) GitHub](https://github.com/glutanimate/frozen-fields).
 
