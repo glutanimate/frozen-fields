@@ -3,6 +3,7 @@
 .gitignore export-ignore
 docs export-ignore
 screenshots export-ignore
+.github export-ignore
 # Adjust GitHub linguist settings:
 ANKIWEB.md linguist-documentation
 README.md linguist-documentation
