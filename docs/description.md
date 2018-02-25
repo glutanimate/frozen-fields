@@ -1,7 +1,7 @@
 
 *Frozen Fields* allows you to conveniently **sticky and unsticky a field** right from the note editor:
 
-![screenshot of snow-flake buttons](https://raw.githubusercontent.com/glutanimate/frozen-fields/blob/master/screenshots/screenshot.png)
+![screenshot of snow-flake buttons](https://raw.githubusercontent.com/glutanimate/frozen-fields/master/screenshots/screenshot.png)
 
 **OVERVIEW**
 
