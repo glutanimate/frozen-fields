@@ -46,7 +46,10 @@ else:
 
         try:
             meta = json.load(io.open(meta_path, encoding="utf-8"))
-        except (IOError, OSError, json.decoder.JSONDecodeError):
+        except (IOError, OSError):
+            meta = None
+        except json.decoder.JSONDecodeError as e:
+            print("Could not read meta.json: " + str(e))
             meta = None
 
         if not meta:
@@ -90,6 +93,7 @@ else:
         try:
             return json.load(io.open(defaults_path, encoding="utf-8"))
         except (IOError, OSError, json.decoder.JSONDecodeError) as e:
+            print("Could not read config.json: " + str(e))
             raise Exception("Config file could not be read: " + str(e))
 
     def getConfig():
