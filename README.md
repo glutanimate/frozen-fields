@@ -55,9 +55,9 @@ For further information on the use of this add-on please check out [the original
 
 *Copyright © 2015-2018 [Aristotelis P.](https://glutanimate.com/)*
 
-*Frozen Fields* is the brainchild of Tiago Barroso. All credit for coming up with this fantastic add-on goes to him.
+This add-on is based on [*Frozen Fields*](https://github.com/tmbb/FrozenFields) by [Tiago Barroso](https://github.com/tmbb). All credit for the original idea and implementation goes to him.
 
-The present fork and update to Anki 2.1 was made possible through the kind support of a fellow Anki user who would like to remain anonymous.
+The present fork and update to Anki 2.1 was made possible through the generous support of a fellow Anki user who would like to remain anonymous.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](https://www.gnu.org/licenses/agpl.html) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. 
 

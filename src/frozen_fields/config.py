@@ -90,8 +90,7 @@ else:
         try:
             return json.load(io.open(defaults_path, encoding="utf-8"))
         except (IOError, OSError, json.decoder.JSONDecodeError) as e:
-            raise Exception("External Editor for Text Files – "
-                            "Config file could not be read: " + str(e))
+            raise Exception("Config file could not be read: " + str(e))
 
     def getConfig():
         """Get user config dictionary
