@@ -101,7 +101,7 @@ function setFrozenFields(fields, frozen) {
         }
         
         txt += "<td width=100%%>"
-        txt += "<div id=f{0} onkeydown='onKey();' oninput='checkForEmptyField()' onmouseup='onKey();'".format(i);
+        txt += "<div id=f{0} onkeydown='onKey();' oninput='onInput()' onmouseup='onKey();'".format(i);
         txt += " onfocus='onFocus(this);' onblur='onBlur();' class=field ";
         txt += "ondragover='onDragOver(this);' onpaste='onPaste(this);' ";
         txt += "oncopy='onCutOrCopy(this);' oncut='onCutOrCopy(this);' ";
