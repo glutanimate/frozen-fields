@@ -7,10 +7,12 @@
 
 <!-- MarkdownTOC -->
 
-- [Screenshots](#screenshots)
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [License and Credits](#license-and-credits)
+- [Frozen Fields Add-on for Anki](#frozen-fields-add-on-for-anki)
+    - [Table of Contents](#table-of-contents)
+    - [Screenshots](#screenshots)
+    - [Installation](#installation)
+    - [Documentation](#documentation)
+    - [License and Credits](#license-and-credits)
 
 <!-- /MarkdownTOC -->
 
@@ -22,7 +24,7 @@
 
 **AnkiWeb**
 
-[Link to the add-on on AnkiWeb](https://ankiweb.net/shared/info/not_available_yet)
+[Link to the add-on on AnkiWeb](https://ankiweb.net/shared/info/516643804)
 
 **Manual installation**
 
@@ -41,9 +43,9 @@
 3. If you would like to keep your settings thus far: Find the `meta.json` file contained within and copy it to a safe location.
 4. Proceed to delete  the `frozen_fields` folder
 3. Download and extract the latest Anki 2.1 add-on release from the [releases tab](https://github.com/Glutanimate/frozen-fields/releases)
-4. Move the new `frozen_fields` folder into the add-ons directory
+4. Rename the extracted folder to `frozen_fields` and move it into the add-ons directory
 5. Optional: Place the `meta.json` file back in the directory if you created a copy beforehand.
-5. Restart Anki
+6. Restart Anki
 
 ### Documentation
 
