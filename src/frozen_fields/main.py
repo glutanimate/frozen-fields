@@ -171,9 +171,10 @@ def loadNote21(self, focusTo=None):
 
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
-        self.web.evalWithCallback("setFields(%s); setFonts(%s); focusField(%s)" % (
+        self.web.evalWithCallback("setFields(%s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
             json.dumps(data),
-            json.dumps(self.fonts()), json.dumps(focusTo)),
+            json.dumps(self.fonts()), json.dumps(focusTo),
+            json.dumps(self.note.id)),
             oncallback)
     else:
         iconstr_frozen = self.resourceToData(icon_path_frozen)
@@ -183,12 +184,13 @@ def loadNote21(self, focusTo=None):
         sticky = [fld["sticky"] for fld in flds]
 
         eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
-                                       hotkey_toggle_field, iconstr_unfrozen)
+                                         hotkey_toggle_field, iconstr_unfrozen)
 
-        eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s)" % (
+        eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
             json.dumps(data), json.dumps(sticky),
             json.dumps(self.fonts()),
-            json.dumps(focusTo))
+            json.dumps(focusTo),
+            json.dumps(self.note.id))
 
         self.web.eval(eval_definitions)
         self.web.evalWithCallback(eval_calls, oncallback)
