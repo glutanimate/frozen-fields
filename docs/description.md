@@ -18,7 +18,7 @@ To freeze/unfreeze a field, just **click the adjacent snowflake** or use the cor
 
 **RELEASE LOG**
 
-- 2018-02-??: **v2.0.0** – Refactored code-base, transitioned to Anki 2.1, added config file
+- 2018-08-05: **v2.0.0** – Refactored code-base, transitioned to Anki 2.1, added config file
 - 2018-01-20: Fixed snowflake icon being pasted into fields under some circumstances (thanks to [Dmitry](https://github.com/ankitest/)!)
 - 2017-03-20: Refactored code-base, added hotkey for toggling all fields
 - 2015-10-11: Added hotkeys
@@ -26,7 +26,7 @@ To freeze/unfreeze a field, just **click the adjacent snowflake** or use the cor
 
 **LATEST CHANGES AND NEWS**
 
-*2018-02-??* **v2.0.0**
+*2018-08-05* **v2.0.0**
 
 This is the first public release of my fork of Tiago Barroso's *Frozen Fields* add-on. I would like to extend my heartfelt gratitude to all of what he has done for the Anki community over the years.
 
