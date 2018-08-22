@@ -83,36 +83,34 @@ function onFrozen(elem) {
     pycmd("frozen:" + currentField.id.substring(1));
 }
 
-function setFrozenFields(fields, frozen) {
-    var txt = "";
-    for (var i=0; i<fields.length; i++) {
-        var n = fields[i][0];
-        var f = fields[i][1];
-        if (!f) {
-            f = "<br>";
-        }
-        txt += "<tr><td style='width:28px'></td><td class=fname>{0}</td></tr><tr>".format(n);
-        
+function addFreezeButtons(frozen, nfld) {
+    let hotkey = '%s';
+    let icon_frozen = '%s';
+    let icon_unfrozen = '%s';
+    let template = document.createElement("template");
+
+    // dummy elements to preserve table layout
+    document.querySelectorAll("td.fname").forEach((td) => {
+        template.innerHTML = "<td style='width:28px'></td>";
+        td.parentElement.insertBefore(template.content.firstChild, td);
+    });
+
+    let fstr = `<td style='width:28px'><div id=i{0} title='{1} field (${hotkey})' onclick='onFrozen(this);'><img src='{2}'/></div></td>`;
+    for (let i=0; i<nfld; i++) {
+        let field = document.querySelector(`#f${i}.field`);
+        let flake_html;
         if (frozen[i]) {
-            txt += "<td style='width:28px'><div id=i{0} title='Unfreeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
+            flake_html = fstr.format(i, "Unfreeze", icon_frozen);
         }
         else {
-            txt += "<td style='width:28px'><div id=i{0} title='Freeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
+            flake_html = fstr.format(i, "Freeze", icon_unfrozen);
         }
-        
-        txt += "<td width=100%%>"
-        txt += "<div id=f{0} onkeydown='onKey();' oninput='onInput()' onmouseup='onKey();'".format(i);
-        txt += " onfocus='onFocus(this);' onblur='onBlur();' class=field ";
-        txt += "ondragover='onDragOver(this);' onpaste='onPaste(this);' ";
-        txt += "oncopy='onCutOrCopy(this);' oncut='onCutOrCopy(this);' ";
-        txt += "contentEditable=true class=field>{0}</div>".format(f);
-        txt += "</td>"
-        txt += "</td></tr>";
-    }
-    $("#fields").html("<table cellpadding=0 width=100%% style='table-layout: fixed;'>" + txt + "</table>");
-    maybeDisableButtons();
-}
 
+        let td = field.parentElement;
+        template.innerHTML = flake_html;
+        td.parentElement.insertBefore(template.content.firstChild, td);
+    }
+}
 """
 
 
@@ -151,49 +149,20 @@ def loadNote20(self):
 
 
 def loadNote21(self, focusTo=None):
-    if not self.note:
-        return
-
-    data = []
-    for fld, val in list(self.note.items()):
-        data.append((fld, self.mw.col.media.escapeImages(val)))
-    self.widget.show()
-    self.updateTags()
-
-    def oncallback(arg):
-        if not self.note:
-            return
-        self.setupForegroundButton()
-        self.checkValid()
-        if focusTo is not None:
-            self.web.setFocus()
-        runHook("loadNote", self)
-
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
-        self.web.evalWithCallback("setFields(%s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
-            json.dumps(data),
-            json.dumps(self.fonts()), json.dumps(focusTo),
-            json.dumps(self.note.id)),
-            oncallback)
-    else:
-        iconstr_frozen = self.resourceToData(icon_path_frozen)
-        iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
+        return
 
-        flds = self.note.model()["flds"]
-        sticky = [fld["sticky"] for fld in flds]
+    iconstr_frozen = self.resourceToData(icon_path_frozen)
+    iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
 
-        eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
-                                         hotkey_toggle_field, iconstr_unfrozen)
+    flds = self.note.model()["flds"]
+    sticky = [fld["sticky"] for fld in flds]
 
-        eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
-            json.dumps(data), json.dumps(sticky),
-            json.dumps(self.fonts()),
-            json.dumps(focusTo),
-            json.dumps(self.note.id))
+    eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen, iconstr_unfrozen)
 
-        self.web.eval(eval_definitions)
-        self.web.evalWithCallback(eval_calls, oncallback)
+    self.web.eval(eval_definitions)
+    self.web.eval("addFreezeButtons(%s, %s)" % (json.dumps(sticky), len(flds)))
 
 
 def onBridge(self, str, _old):
@@ -268,7 +237,7 @@ def onSetupShortcuts21(cuts, self):
 if anki21:
     addHook("setupEditorShortcuts", onSetupShortcuts21)
     Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
-    Editor.loadNote = loadNote21
+    addHook("loadNote", loadNote21)
     Editor.onFrozenToggle = onFrozenToggle21
 else:
     addHook("setupEditorButtons", onSetupButtons20)
