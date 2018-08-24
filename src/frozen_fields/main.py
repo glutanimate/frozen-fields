@@ -160,9 +160,13 @@ def loadNote21(self, focusTo=None):
     sticky = [fld["sticky"] for fld in flds]
 
     eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen, iconstr_unfrozen)
-
     self.web.eval(eval_definitions)
-    self.web.eval("addFreezeButtons(%s, %s)" % (json.dumps(sticky), len(flds)))
+
+    def oncallback(arg):
+        if focusTo is not None:
+            self.web.setFocus()
+
+    self.web.evalWithCallback("addFreezeButtons(%s, %s)" % (json.dumps(sticky), len(flds)), oncallback)
 
 
 def onBridge(self, str, _old):
