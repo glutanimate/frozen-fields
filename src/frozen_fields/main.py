@@ -33,6 +33,15 @@ icon_path_unfrozen = os.path.join(icon_path, "unfrozen.png")
 icon_frozen = QUrl.fromLocalFile(icon_path_frozen).toString()
 icon_unfrozen = QUrl.fromLocalFile(icon_path_unfrozen).toString()
 
+if anki21:
+    # Editor.resourceToData isn't a static method, but it doesn't do anything
+    # with the "self" argument, so it's okay to use it this way
+    iconstr_frozen = Editor.resourceToData(None, icon_path_frozen)
+    iconstr_unfrozen = Editor.resourceToData(None, icon_path_unfrozen)
+else:
+    iconstr_frozen = None
+    iconstr_unfrozen = None
+
 hotkey_toggle_field = local_conf["hotkeyOne"]
 hotkey_toggle_all = local_conf["hotkeyAll"]
 
@@ -78,15 +87,29 @@ function setFrozenFields(fields, frozen, focusTo) {
 
 
 js_code_21 = """
+let icon_frozen = '%s';
+let icon_unfrozen = '%s';
+let freeze_hotkey = '%s';
+
 function onFrozen(elem) {
     currentField = elem;
+    toggleFrozen(elem);
+}
+
+function toggleFrozen(elem) {
+    let img = elem.querySelector("img");
+    if (elem.dataset.frozen) {
+        img.src = icon_unfrozen;
+        elem.title = "Freeze field (${freeze_hotkey})";
+    } else {
+        elem.querySelector("img").src = icon_frozen;
+        elem.title = "Unfreeze field (${freeze_hotkey})";
+    }
+    elem.dataset.frozen = elem.dataset.frozen ? "" : "true";
     pycmd("frozen:" + currentField.id.substring(1));
 }
 
 function addFreezeButtons(frozen, nfld) {
-    let hotkey = '%s';
-    let icon_frozen = '%s';
-    let icon_unfrozen = '%s';
     let template = document.createElement("template");
 
     // dummy elements to preserve table layout
@@ -95,15 +118,15 @@ function addFreezeButtons(frozen, nfld) {
         td.parentElement.insertBefore(template.content.firstChild, td);
     });
 
-    let fstr = `<td style='width:28px'><div id=i{0} title='{1} field (${hotkey})' onclick='onFrozen(this);'><img src='{2}'/></div></td>`;
+    let fstr = `<td style='width:28px'><div id=i{0} data-frozen='{3}' title='{1} field (${freeze_hotkey})' onclick='onFrozen(this);'><img src='{2}'/></div></td>`;
     for (let i=0; i<nfld; i++) {
         let field = document.querySelector(`#f${i}.field`);
         let flake_html;
         if (frozen[i]) {
-            flake_html = fstr.format(i, "Unfreeze", icon_frozen);
+            flake_html = fstr.format(i, "Unfreeze", icon_frozen, "true");
         }
         else {
-            flake_html = fstr.format(i, "Freeze", icon_unfrozen);
+            flake_html = fstr.format(i, "Freeze", icon_unfrozen, "");
         }
 
         let td = field.parentElement;
@@ -111,7 +134,7 @@ function addFreezeButtons(frozen, nfld) {
         td.parentElement.insertBefore(template.content.firstChild, td);
     }
 }
-"""
+""" % (iconstr_frozen, iconstr_unfrozen, hotkey_toggle_field)
 
 
 def loadNote20(self):
@@ -153,14 +176,8 @@ def loadNote21(self, focusTo=None):
     if not isinstance(self.parentWindow, AddCards):
         return
 
-    iconstr_frozen = self.resourceToData(icon_path_frozen)
-    iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
-
     flds = self.note.model()["flds"]
     sticky = [fld["sticky"] for fld in flds]
-
-    eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen, iconstr_unfrozen)
-    self.web.eval(eval_definitions)
 
     def oncallback(arg):
         if focusTo is not None:
@@ -186,13 +203,12 @@ def onBridge(self, str, _old):
     flds[cur]['sticky'] = not flds[cur]['sticky']
 
     if anki21:
-        # load and restore old focus
-        self.loadNote(focusTo=getattr(self, "lastField", None))
+        self.web.eval("focusField(%d)" % cur)
     else:
         self.loadNote()
 
 
-def frozenToggle(self, batch=False):
+def frozenToggle20(self, batch=False):
     """Toggle state of current field"""
 
     flds = self.note.model()['flds']
@@ -209,11 +225,26 @@ def frozenToggle(self, batch=False):
             except IndexError:
                 break
 
-    if anki21:
-        self.loadNoteKeepingFocus()
-    else:
-        self.web.eval("saveField('key');")
-        self.loadNote()
+    self.web.eval("saveField('key');")
+    self.loadNote()
+
+
+def frozenToggle21(self, batch=False):
+    """Toggle state of current field"""
+
+    flds = self.note.model()['flds']
+    to_toggle = [self.currentField or 0]
+    js = ""
+    if batch:
+        to_toggle = range(len(self.note.fields))
+    for n in to_toggle:
+         try:
+            js += "toggleFrozen(document.querySelector('#i%d'));" % n
+         except IndexError:
+            break
+
+    self.web.evalWithCallback(js, lambda _: self.web.eval("focusField(%s)" % self.currentField if self.currentField else "null"))
+
 
 def onFrozenToggle21(self, batch=False):
     self.web.evalWithCallback("saveField('key');", lambda _: self.frozenToggle(batch=batch))
@@ -241,11 +272,12 @@ def onSetupShortcuts21(cuts, self):
 if anki21:
     addHook("setupEditorShortcuts", onSetupShortcuts21)
     Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
+    Editor.setupWeb = wrap(Editor.setupWeb, lambda self: self.web.eval(js_code_21), "after")
     addHook("loadNote", loadNote21)
     Editor.onFrozenToggle = onFrozenToggle21
+    Editor.frozenToggle = frozenToggle21
 else:
     addHook("setupEditorButtons", onSetupButtons20)
     Editor.bridge = wrap(Editor.bridge, onBridge, 'around')
     Editor.loadNote = loadNote20
-
-Editor.frozenToggle = frozenToggle
+    Editor.frozenToggle = frozenToggle20
