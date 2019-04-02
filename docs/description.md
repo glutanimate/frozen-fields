@@ -51,7 +51,7 @@ Please **do not report issues or bugs in the review section below**. I can only 
 **CREDITS AND LICENSE**
 
 *Copyright © 2012-2015 [Tiago Barroso](https://github.com/tmbb)*
-*Copyright © 2015-2018 [Aristotelis P.](https://glutanimate.com/)*
+*Copyright © 2015-2019 [Aristotelis P.](https://glutanimate.com/)*
 
 This add-on is based on [*Frozen Fields*](https://github.com/tmbb/FrozenFields) by [Tiago Barroso](https://github.com/tmbb). All credit for the original idea and implementation goes to him. The present fork and update to Anki 2.1 was made possible thanks to the generous support of a fellow Anki user who would like to remain anonymous.
 
