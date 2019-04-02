@@ -12,6 +12,7 @@ src/*/gui/resources/anki*
 src/*/gui/resources/LICENSE*
 src/*/data/patrons.py
 *-anki2*.zip
+*.ankiaddon
 # Python
 .python-version
 .mypy_cache/
