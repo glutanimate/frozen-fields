@@ -109,7 +109,7 @@ buildarchive:
 		cd build/dist && \
 		PYENV_VERSION=$(PYENV20) ../../$(UIBUILDER) "$(ADDONDIR)" anki20 && \
 		cd src && \
-		zip -r "../../../$(ADDON)-release-$(VERSION)-anki20.zip" "$(ADDONDIR)" *.py
+		zip -r "../../$(ADDON)-release-$(VERSION)-anki20.zip" "$(ADDONDIR)" *.py
 	
 	# Build for Anki 2.1
 	#	different releases for GitHub (legacy), AnkiWeb, and GitHub
@@ -118,16 +118,14 @@ buildarchive:
 		cd build/dist21 &&  \
 		eval "$$(pyenv init -)" && eval "$$(pyenv virtualenv-init -)" && \
 		PYENV_VERSION=$(PYENV21) ../../$(UIBUILDER) "$(ADDONDIR)" anki21 && \
-		cd src && \
-		zip -r "../../../$(ADDON)-release-$(VERSION)-anki21.zip" "$(ADDONDIR)" && \
-		cd "$(ADDONDIR)" && \
-		zip -r "../../../../$(ADDON)-release-$(VERSION)-anki21-ankiweb.zip" * && \
-		zip -r "../../../../$(ADDON)-release-$(VERSION).ankiaddon" *
+		cd "src/$(ADDONDIR)" && \
+		zip -r "../../../$(ADDON)-release-$(VERSION)-anki21-ankiweb.zip" * && \
+		zip -r "../../../$(ADDON)-release-$(VERSION).ankiaddon" *
 	
-	rm -rf build
+	rm -rf build/dist build/dist21
 
 clean:
-	rm -rf build
+	rm -rf build/dist build/dist21
 	find . \( -name '*.pyc' -o -name '*.pyo' -o -name '__pycache__' \) -delete
 
 ui:
