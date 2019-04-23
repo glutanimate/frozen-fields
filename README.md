@@ -22,6 +22,8 @@
 <!-- MarkdownTOC -->
 
 - [Installation](#installation)
+  - [AnkiWeb](#ankiweb)
+  - [Manual installation](#manual-installation)
 - [Documentation](#documentation)
 - [License and Credits](#license-and-credits)
 
@@ -29,11 +31,11 @@
 
 ### Installation
 
-**AnkiWeb**
+#### AnkiWeb
 
 The easiest way to install Frozen Fields is through [AnkiWeb](https://ankiweb.net/shared/info/516643804).
 
-**Manual installation**
+#### Manual installation
 
 Click on the entry corresponding to your Anki version:
 
