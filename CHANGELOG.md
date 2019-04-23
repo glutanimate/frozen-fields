@@ -12,6 +12,10 @@ If you enjoy Frozen Fields, please consider supporting my work on Patreon, or by
 
 ## [Unreleased]
 
+## [2.0.2] - 2019-04-23
+
+### [Download](https://github.com/glutanimate/frozen-fields/releases/tag/v2.0.2)
+
 ### Fixed
 
 - Fixed field display issues on Anki 2.1.12 (#12, thanks to @ijgnd for the report!)
@@ -48,7 +52,8 @@ This update is meant to carry on his legacy by adding Anki 2.1 support, refactor
 -  Fix rare instances of snowflake icon being pasted into fields (thanks to [Dmitry Mikheev](https://github.com/ankitest/)!)
 
 
-[Unreleased]: https://github.com/glutanimate/frozen-fields/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/glutanimate/frozen-fields/compare/v2.0.2...HEAD
+[2.0.2]: https://github.com/glutanimate/frozen-fields/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/glutanimate/frozen-fields/compare/v2.0.0...v2.0.1
 
 -----
