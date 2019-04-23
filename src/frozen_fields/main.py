@@ -88,7 +88,9 @@ function setFrozenFields(fields, frozen) {
     for (var i=0; i<fields.length; i++) {
         var n = fields[i][0];
         var f = fields[i][1];
-
+        if (!f) {
+            f = "<br>";
+        }
         // ----------- mod start -----------
         txt += "<tr><td style='width:28px'></td><td class=fname>{0}</td></tr><tr>".format(n);
         
