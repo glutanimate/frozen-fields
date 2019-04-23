@@ -5,7 +5,7 @@
 #   Dependencies:   git, bash, ./tools/build_ui.sh
 #	Optional: 		pyenv	
 #
-# Copyright (C) 2017-2019  Aristotelis P. <https//glutanimate.com/>
+# Copyright (C) 2017-2019  Aristotelis P. <https://glutanimate.com/>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -76,7 +76,7 @@ buildarchive:
 
 	# Remove existing release build of same version
 	rm -f *-release-$(VERSION)-anki2*.zip
-	rm -f *-release-$(VERSION).ankiaddon
+	rm -f *-release-$(VERSION)-anki21.ankiaddon
 
 	# Create a git snapshot of source files at $(VERSION) tag
 	git archive --format tar $(VERSION) | tar -x -C build/dist/
@@ -94,11 +94,6 @@ buildarchive:
 	# Include referenced assets that are not part of version control
 	[[ -d "resources/icons/optional" ]] && \
 		 cp -r "resources/icons/optional" "build/dist/resources/icons/" || true
-	
-	# Update credits if possible
-	# type patreon_update_credits_addon >/dev/null 2>&1 && \
-	# 	cp addon.json build/dist/ && \
-	# 	cd build/dist && patreon_update_credits_addon -r || true
 
 	# Duplicate build folder for both build targets
 	cp -r build/dist/* build/dist21
@@ -120,7 +115,7 @@ buildarchive:
 		PYENV_VERSION=$(PYENV21) ../../$(UIBUILDER) "$(ADDONDIR)" anki21 && \
 		cd "src/$(ADDONDIR)" && \
 		zip -r "../../../$(ADDON)-release-$(VERSION)-anki21-ankiweb.zip" * && \
-		zip -r "../../../$(ADDON)-release-$(VERSION).ankiaddon" *
+		zip -r "../../../$(ADDON)-release-$(VERSION)-anki21.ankiaddon" *
 	
 	rm -rf build/dist build/dist21
 
