@@ -12,6 +12,10 @@ If you enjoy Frozen Fields, please consider supporting my work on Patreon, or by
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed field display issues on Anki 2.1.12 (#12, thanks to @ijgnd for the report!)
+
 ## [2.0.1] - 2019-04-02
 
 ### [Download](https://github.com/glutanimate/frozen-fields/releases/tag/v2.0.1)
