@@ -18,6 +18,7 @@ To freeze/unfreeze a field, just **click the adjacent snowflake** or use the cor
 
 **RELEASE LOG**
 
+- 2019-04-25: **v2.0.2** – Fixed field display issues on Anki 2.1.12 (thanks to @ijgnd for the report!)
 - 2019-04-02: **v2.0.1** – Fixed some issues on recent 2.1 releases (thanks to z1lc and ijgnd for the reports!)
 - 2018-08-05: **v2.0.0** – Refactored code-base, transitioned to Anki 2.1, added config file
 - 2018-01-20: Fixed snowflake icon being pasted into fields under some circumstances (thanks to [Dmitry](https://github.com/ankitest/)!)
@@ -26,6 +27,10 @@ To freeze/unfreeze a field, just **click the adjacent snowflake** or use the cor
 - 2012: **v1.0.0**? – Initial release by Tiago Barroso
 
 **LATEST CHANGES AND NEWS**
+
+*2019-04-25* **v2.0.2**
+
+Please note that the field handling in Anki's editor has been subject to a lot of changes in recent releases. Because of that, Frozen Fields for Anki 2.1 will only work well on Anki 2.1.12 and up. If you are experiencing issues with the editor formatting please make sure to upgrade your Anki version before filing a bug report.
 
 *2018-08-05* **v2.0.0**
 
