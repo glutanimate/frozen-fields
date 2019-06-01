@@ -1,12 +1,12 @@
 # Changelog
 
-All notable changes to [Frozen Fields](https://ankiweb.net/shared/info/1771074083) will be documented here. You can click on each release number to be directed to a detailed log of all code commits for that particular release. The download links will direct you to the GitHub release page, allowing you to manually install a release if you want.
+All notable changes to Frozen Fields will be documented here. You can click on each release number to be directed to a detailed log of all code commits for that particular release. The download links will direct you to the GitHub release page, allowing you to manually install a release if you want.
 
 If you enjoy Frozen Fields, please consider supporting my work on Patreon, or by buying me a cup of coffee :coffee::
 
-<center><a href="https://patreon.com/glutanimate"><img src="https://glutanimate.com/logos/patreon_button.svg" height="48px"></a> <a href='https://ko-fi.com/X8X0L4YV' target='_blank'><img height='48px' style='border:0px;height:48px;margin-left:2em;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a></center>
-
-&nbsp;
+<p align="center">
+<a href="https://www.patreon.com/glutanimate" rel="nofollow" title="Support me on Patreon 😄"><img src="https://glutanimate.com/logos/patreon_button.svg"></a>      <a href="https://ko-fi.com/X8X0L4YV" rel="nofollow" title="Buy me a coffee 😊"><img src="https://glutanimate.com/logos/kofi_button.svg"></a>
+</p>
 
 :heart: My heartfelt thanks goes out to everyone who has supported this add-on through their tips, contributions, or any other means (you know who you are!). All of this would not have been possible without you. Thank you for being awesome!
 
@@ -15,6 +15,8 @@ If you enjoy Frozen Fields, please consider supporting my work on Patreon, or by
 ## [2.0.2] - 2019-04-23
 
 ### [Download](https://github.com/glutanimate/frozen-fields/releases/tag/v2.0.2)
+
+Please note that the field handling in Anki's editor has been subject to a lot of changes in recent releases. Because of that, Frozen Fields for Anki 2.1 will only work well on Anki 2.1.12 and up. If you are experiencing issues with the editor formatting please make sure to upgrade your Anki version before filing a bug report.
 
 ### Fixed
 

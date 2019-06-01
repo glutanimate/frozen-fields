@@ -1,0 +1,16 @@
+{
+    "display_name": "Frozen Fields",
+    "module_name": "frozen_fields",
+    "repo_name": "frozen-fields",
+    "ankiweb_id": "516643804",
+    "author": "Glutanimate",
+    "contact": "https://glutanimate.com",
+    "homepage": "https://github.com/glutanimate/frozen-fields",
+    "copyright_start": 2015,
+    "tags": "ui sticky",
+    "conflicts": [],
+    "targets": [
+        "anki20",
+        "anki21"
+    ]
+}
