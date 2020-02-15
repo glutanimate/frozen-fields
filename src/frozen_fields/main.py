@@ -174,7 +174,11 @@ def loadNote21(self, focusTo=None):
         self.checkValid()
         if focusTo is not None:
             self.web.setFocus()
-        runHook("loadNote", self)
+        try:
+            from aqt import gui_hooks
+            gui_hooks.editor_did_load_note(self)
+        except:
+            runHook("loadNote", self)
 
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
