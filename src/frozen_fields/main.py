@@ -59,7 +59,7 @@ function setFrozenFields(fields, frozen, focusTo) {
             txt += "<td style='min-width: 28'><div id=i{0} title='Freeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
         }
         txt += "<td width=100%%>"
-        txt += "<div id=f{0} onkeydown='onKey();' onmouseup='onKey();'".format(i);
+        txt += "<div id=f{0} onkeydown='onKey(window.event);' onmouseup='onKey(window.event);'".format(i);
         txt += " onfocus='onFocus(this);' onblur='onBlur();' class=field ";
         txt += "ondragover='onDragOver(this);' ";
         txt += "contentEditable=true class=field>{0}</div>".format(f);
