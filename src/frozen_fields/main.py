@@ -142,10 +142,7 @@ def onBridge(self, str, _old):
     flds = self.note.model()['flds']
     flds[cur]['sticky'] = not flds[cur]['sticky']
 
-    if anki21:
-        # load and restore old focus
-        self.loadNote(focusTo=getattr(self, "lastField", None))
-    else:
+    if not anki21:
         self.loadNote()
 
 

@@ -1,7 +1,17 @@
 function onFrozen(elem, idx) {
+    wasFrozen = frozenFields[idx];
     pycmd("frozen:" + idx);
     wasFrozen = frozenFields[idx];
     frozenFields[idx] = !wasFrozen;
+    $div = $(elem);
+    $img = $div.find("img");
+    if (wasFrozen) {
+        elem.title = "Freeze field ("+hotkey_toggle_field+")";
+        $img.attr("src", src_unfrozen);
+    } else {
+        elem.title = "Unfreeze field ("+hotkey_toggle_field+")";
+        $img.attr("src", src_frozen);
+    }
 }
 
 var hotkey_toggle_field = "%s";
