@@ -1,12 +1,17 @@
 function onFrozen(elem, idx) {
     pycmd("frozen:" + idx);
+    wasFrozen = frozenFields[idx];
+    frozenFields[idx] = !wasFrozen;
 }
 
 var hotkey_toggle_field = "%s";
 var src_frozen = "%s";
 var src_unfrozen = "%s";
 
+var frozenFields = null;
+
 function setFrozenFields(fields, frozen) {
+    frozenFields = frozen;
     var txt = "";
     for (var i=0; i<fields.length; i++) {
         var n = fields[i][0];
