@@ -114,7 +114,7 @@ def loadNote21(self, focusTo=None):
         sticky = [fld["sticky"] for fld in flds]
 
         eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
-                                         hotkey_toggle_field, iconstr_unfrozen)
+                                         iconstr_unfrozen)
 
         eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
             json.dumps(data), json.dumps(sticky),

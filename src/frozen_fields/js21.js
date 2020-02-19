@@ -2,6 +2,8 @@ function onFrozen(elem, idx) {
     pycmd("frozen:" + idx);
 }
 
+var hotkey_toggle_field = "%s";
+
 function setFrozenFields(fields, frozen) {
     var txt = "";
     for (var i=0; i<fields.length; i++) {
@@ -14,10 +16,10 @@ function setFrozenFields(fields, frozen) {
         txt += "<tr><td style='width:28px'></td><td class=fname>"+n+"</td></tr><tr>";
 
         if (frozen[i]) {
-            txt += "<td style='width:28px'><div id=i"+i+" title='Unfreeze field (%s)' onclick='onFrozen(this, "+i+");'><img src='%s'/></div></td>";
+            txt += "<td style='width:28px'><div id=i"+i+" title='Unfreeze field ("+hotkey_toggle_field+")' onclick='onFrozen(this, "+i+");'><img src='%s'/></div></td>";
         }
         else {
-            txt += "<td style='width:28px'><div id=i"+i+" title='Freeze field (%s)' onclick='onFrozen(this, "+i+");'><img src='%s'/></div></td>";
+            txt += "<td style='width:28px'><div id=i"+i+" title='Freeze field ("+hotkey_toggle_field+")' onclick='onFrozen(this, "+i+");'><img src='%s'/></div></td>";
         }
 
         txt += "<td width=100%%>"
