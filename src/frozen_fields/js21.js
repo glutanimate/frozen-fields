@@ -12,23 +12,23 @@ function setFrozenFields(fields, frozen) {
             f = "<br>";
         }
         // ----------- mod start -----------
-        txt += "<tr><td style='width:28px'></td><td class=fname>{0}</td></tr><tr>".format(n);
+        txt += "<tr><td style='width:28px'></td><td class=fname>"+n+"</td></tr><tr>";
 
         if (frozen[i]) {
-            txt += "<td style='width:28px'><div id=i{0} title='Unfreeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
+            txt += "<td style='width:28px'><div id=i"+i+" title='Unfreeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>";
         }
         else {
-            txt += "<td style='width:28px'><div id=i{0} title='Freeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
+            txt += "<td style='width:28px'><div id=i"+i+" title='Freeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>";
         }
 
         txt += "<td width=100%%>"
         // -----------  mod end -----------
         
-        txt += "<div id=f{0} onkeydown='onKey(window.event);' oninput='onInput()' onmouseup='onKey(window.event);'".format(i);
+        txt += "<div id=f"+i+" onkeydown='onKey(window.event);' oninput='onInput()' onmouseup='onKey(window.event);'";
         txt += " onfocus='onFocus(this);' onblur='onBlur();' class='field clearfix' ";
         txt += "ondragover='onDragOver(this);' onpaste='onPaste(this);' ";
         txt += "oncopy='onCutOrCopy(this);' oncut='onCutOrCopy(this);' ";
-        txt += "contentEditable=true class=field>{0}</div>".format(f);
+        txt += "contentEditable=true class=field>"+f+"</div>";
 
         // ----------- mod start -----------
         txt += "</td>"
