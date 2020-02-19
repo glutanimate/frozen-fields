@@ -14,16 +14,14 @@ License: GNU AGPLv3 <https://www.gnu.org/licenses/agpl.html>
 
 import os
 
+from anki.hooks import addHook, runHook, wrap
+from anki.utils import json
+from aqt.addcards import AddCards
+from aqt.editor import Editor
 from aqt.qt import *
 
-from aqt.editor import Editor
-from aqt.addcards import AddCards
-
-from anki.hooks import wrap, addHook, runHook
-from anki.utils import json
-
-from .consts import *
 from .config import local_conf
+from .consts import *
 
 icon_path = os.path.join(addon_path, "icons")
 
@@ -209,7 +207,7 @@ def loadNote21(self, focusTo=None):
 
 def onBridge(self, str, _old):
     """Extends the js<->py bridge with our pycmd handler"""
-    
+
     if not str.startswith("frozen"):
         if anki21 and str.startswith("blur"):
             self.lastField = self.currentField  # save old focus
@@ -253,8 +251,10 @@ def frozenToggle(self, batch=False):
         self.web.eval("saveField('key');")
         self.loadNote()
 
+
 def onFrozenToggle21(self, batch=False):
-    self.web.evalWithCallback("saveField('key');", lambda _: self.frozenToggle(batch=batch))
+    self.web.evalWithCallback(
+        "saveField('key');", lambda _: self.frozenToggle(batch=batch))
 
 
 def onSetupButtons20(self):
