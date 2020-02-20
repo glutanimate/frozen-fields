@@ -12,6 +12,10 @@ If you enjoy Frozen Fields, please consider supporting my work on Patreon, or by
 
 ## [Unreleased]
 
+### Changed
+
+- Improved inter-addon compatibility (thanks to [Arthur](https://github.com/Arthur-Milchior/) and [BlueGreenMagick](https://github.com/BlueGreenMagick))
+
 ## [2.0.2] - 2019-04-23
 
 ### [Download](https://github.com/glutanimate/frozen-fields/releases/tag/v2.0.2)
