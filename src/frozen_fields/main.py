@@ -14,16 +14,14 @@ License: GNU AGPLv3 <https://www.gnu.org/licenses/agpl.html>
 
 import os
 
+from anki.hooks import addHook, runHook, wrap
+from anki.utils import json
+from aqt.addcards import AddCards
+from aqt.editor import Editor
 from aqt.qt import *
 
-from aqt.editor import Editor
-from aqt.addcards import AddCards
-
-from anki.hooks import wrap, addHook, runHook
-from anki.utils import json
-
-from .consts import *
 from .config import local_conf
+from .consts import *
 
 icon_path = os.path.join(addon_path, "icons")
 
@@ -36,91 +34,12 @@ icon_unfrozen = QUrl.fromLocalFile(icon_path_unfrozen).toString()
 hotkey_toggle_field = local_conf["hotkeyOne"]
 hotkey_toggle_all = local_conf["hotkeyAll"]
 
-
-js_code_20 = """
-function onFrozen(elem) {
-    currentField = elem;
-    py.run("frozen:" + currentField.id.substring(1));
-}
-
-function setFrozenFields(fields, frozen, focusTo) {
-    var txt = "";
-    for (var i=0; i<fields.length; i++) {
-        var n = fields[i][0];
-        var f = fields[i][1];
-        if (!f) {
-            f = "<br>";
-        }
-        txt += "<tr><td style='min-width: 28'></td><td class=fname>{0}</td></tr><tr>".format(n);
-        if (frozen[i]) {
-            txt += "<td style='min-width: 28'><div id=i{0} title='Unfreeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
-        }
-        else {
-            txt += "<td style='min-width: 28'><div id=i{0} title='Freeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
-        }
-        txt += "<td width=100%%>"
-        txt += "<div id=f{0} onkeydown='onKey();' onmouseup='onKey();'".format(i);
-        txt += " onfocus='onFocus(this);' onblur='onBlur();' class=field ";
-        txt += "ondragover='onDragOver(this);' ";
-        txt += "contentEditable=true class=field>{0}</div>".format(f);
-        txt += "</td>"
-        txt += "</td></tr>";
-    }
-    $("#fields").html("<table cellpadding=0 width=100%%>"+txt+"</table>");
-    if (!focusTo) {
-        focusTo = 0;
-    }
-    if (focusTo >= 0) {
-        $("#f"+focusTo).focus();
-    }
-};
-""" % (hotkey_toggle_field, icon_frozen, hotkey_toggle_field, icon_unfrozen)
-
-
-js_code_21 = """
-function onFrozen(elem) {
-    currentField = elem;
-    pycmd("frozen:" + currentField.id.substring(1));
-}
-
-function setFrozenFields(fields, frozen) {
-    var txt = "";
-    for (var i=0; i<fields.length; i++) {
-        var n = fields[i][0];
-        var f = fields[i][1];
-        if (!f) {
-            f = "<br>";
-        }
-        // ----------- mod start -----------
-        txt += "<tr><td style='width:28px'></td><td class=fname>{0}</td></tr><tr>".format(n);
-        
-        if (frozen[i]) {
-            txt += "<td style='width:28px'><div id=i{0} title='Unfreeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
-        }
-        else {
-            txt += "<td style='width:28px'><div id=i{0} title='Freeze field (%s)' onclick='onFrozen(this);'><img src='%s'/></div></td>".format(i);
-        }
-        
-        txt += "<td width=100%%>"
-        // -----------  mod end -----------
-        
-        txt += "<div id=f{0} onkeydown='onKey();' oninput='onInput()' onmouseup='onKey();'".format(i);
-        txt += " onfocus='onFocus(this);' onblur='onBlur();' class='field clearfix' ";
-        txt += "ondragover='onDragOver(this);' onpaste='onPaste(this);' ";
-        txt += "oncopy='onCutOrCopy(this);' oncut='onCutOrCopy(this);' ";
-        txt += "contentEditable=true class=field>{0}</div>".format(f);
-
-        // ----------- mod start -----------
-        txt += "</td>"
-        // -----------  mod end -----------
-
-        txt += "</td></tr>";
-    }
-    $("#fields").html("<table cellpadding=0 width=100%% style='table-layout: fixed;'>" + txt + "</table>");
-    maybeDisableButtons();
-}
-
-"""
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+with open(os.path.join(__location__, "js20.js"), "r") as f:
+          js_code_20 = f.read() % (hotkey_toggle_field, icon_frozen, hotkey_toggle_field, icon_unfrozen)
+with open(os.path.join(__location__, "js21.js"), "r") as f:
+          js_code_21 = f.read()
 
 
 def loadNote20(self):
@@ -195,7 +114,7 @@ def loadNote21(self, focusTo=None):
         sticky = [fld["sticky"] for fld in flds]
 
         eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
-                                         hotkey_toggle_field, iconstr_unfrozen)
+                                         iconstr_unfrozen)
 
         eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
             json.dumps(data), json.dumps(sticky),
@@ -209,7 +128,7 @@ def loadNote21(self, focusTo=None):
 
 def onBridge(self, str, _old):
     """Extends the js<->py bridge with our pycmd handler"""
-    
+
     if not str.startswith("frozen"):
         if anki21 and str.startswith("blur"):
             self.lastField = self.currentField  # save old focus
@@ -223,10 +142,7 @@ def onBridge(self, str, _old):
     flds = self.note.model()['flds']
     flds[cur]['sticky'] = not flds[cur]['sticky']
 
-    if anki21:
-        # load and restore old focus
-        self.loadNote(focusTo=getattr(self, "lastField", None))
-    else:
+    if not anki21:
         self.loadNote()
 
 
@@ -253,8 +169,10 @@ def frozenToggle(self, batch=False):
         self.web.eval("saveField('key');")
         self.loadNote()
 
+
 def onFrozenToggle21(self, batch=False):
-    self.web.evalWithCallback("saveField('key');", lambda _: self.frozenToggle(batch=batch))
+    self.web.evalWithCallback(
+        "saveField('key');", lambda _: self.frozenToggle(batch=batch))
 
 
 def onSetupButtons20(self):

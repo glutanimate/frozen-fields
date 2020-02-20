@@ -9,11 +9,11 @@ Copyright: (c) 2018 Glutanimate <https://glutanimate.com/>
 License: GNU AGPLv3 <https://www.gnu.org/licenses/agpl.html>
 """
 
-import os
 import io
+import os
 
-from aqt import mw
 from anki.utils import json
+from aqt import mw
 
 from .consts import *
 
