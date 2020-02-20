@@ -36,6 +36,7 @@ import os
 
 from anki.hooks import addHook, runHook, wrap
 from anki.utils import json
+from aqt import gui_hooks
 from aqt.addcards import AddCards
 from aqt.editor import Editor
 from aqt.qt import *
@@ -77,11 +78,7 @@ def loadNote(self, focusTo=None):
         self.checkValid()
         if focusTo is not None:
             self.web.setFocus()
-        try:
-            from aqt import gui_hooks
-            gui_hooks.editor_did_load_note(self)
-        except:
-            runHook("loadNote", self)
+        gui_hooks.editor_did_load_note(self)
 
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
@@ -110,21 +107,24 @@ def loadNote(self, focusTo=None):
         self.web.evalWithCallback(eval_calls, oncallback)
 
 
-def onBridge(self, str, _old):
+def onBridge(handled, message, context):
+    self = context
     """Extends the js<->py bridge with our pycmd handler"""
-
-    if not str.startswith("frozen"):
-        if str.startswith("blur"):
+    if not isinstance(context, Editor):
+        return handled
+    if not message.startswith("frozen"):
+        if message.startswith("blur"):
             self.lastField = self.currentField  # save old focus
-        return _old(self, str)
+        return handled
     if not self.note or not runHook:
         # shutdown
-        return
+        return handled
 
-    (cmd, txt) = str.split(":", 1)
+    (cmd, txt) = message.split(":", 1)
     cur = int(txt)
     flds = self.note.model()['flds']
     flds[cur]['sticky'] = not flds[cur]['sticky']
+    return (True, None)
 
 
 def frozenToggle(self, batch=False):
@@ -159,9 +159,10 @@ def onSetupShortcuts(cuts, self):
 
 # Add-on hooks, etc.
 
+
 def initializeEditor():
     addHook("setupEditorShortcuts", onSetupShortcuts)
-    Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
+    gui_hooks.webview_did_receive_js_message.append(onBridge)
     Editor.loadNote = loadNote
     Editor.onFrozenToggle = onFrozenToggle
 
