@@ -36,6 +36,7 @@ import os
 
 from anki.hooks import addHook, runHook, wrap
 from anki.utils import json
+from aqt import gui_hooks
 from aqt.addcards import AddCards
 from aqt.editor import Editor
 from aqt.qt import *
@@ -77,11 +78,7 @@ def loadNote(self, focusTo=None):
         self.checkValid()
         if focusTo is not None:
             self.web.setFocus()
-        try:
-            from aqt import gui_hooks
-            gui_hooks.editor_did_load_note(self)
-        except:
-            runHook("loadNote", self)
+        gui_hooks.editor_did_load_note(self)
 
     # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
@@ -158,6 +155,7 @@ def onSetupShortcuts(cuts, self):
     # third value: enable shortcut even when no field selected
 
 # Add-on hooks, etc.
+
 
 def initializeEditor():
     addHook("setupEditorShortcuts", onSetupShortcuts)
