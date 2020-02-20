@@ -48,8 +48,6 @@ function setFrozenFields(fields, frozen) {
         txt += "oncopy='onCutOrCopy(this);' oncut='onCutOrCopy(this);' ";
         txt += "contentEditable=true class=field>"+f+"</div>";
 
-        // ----------- mod start -----------
-        txt += "</td>"
         // -----------  mod end -----------
 
         txt += "</td></tr>";
