@@ -36,47 +36,11 @@ hotkey_toggle_all = local_conf["hotkeyAll"]
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
-with open(os.path.join(__location__, "js20.js"), "r") as f:
-          js_code_20 = f.read() % (hotkey_toggle_field, icon_frozen, hotkey_toggle_field, icon_unfrozen)
 with open(os.path.join(__location__, "js21.js"), "r") as f:
-          js_code_21 = f.read()
+    js_code_21 = f.read()
 
 
-def loadNote20(self):
-    """Modified loadNote(), adds buttons to Editor"""
-    if not self.note:
-        return
-    if self.stealFocus:
-        field = self.currentField
-    else:
-        field = -1
-    if not self._loaded:
-        # will be loaded when page is ready
-        return
-    data = []
-    for fld, val in self.note.items():
-        data.append((fld, self.mw.col.media.escapeImages(val)))
-    ###### ↓modified #########
-    if isinstance(self.parentWindow, AddCards):  # only modify AddCards Editor
-        flds = self.note.model()["flds"]
-        sticky = [fld["sticky"] for fld in flds]
-        self.web.eval(js_code_20)
-        self.web.eval("setFrozenFields(%s, %s, %d);" % (
-            json.dumps(data), json.dumps(sticky), field))
-    else:
-        self.web.eval("setFields(%s, %d);" % (
-            json.dumps(data), field))
-    ###########################
-    self.web.eval("setFonts(%s);" % (
-        json.dumps(self.fonts())))
-    self.checkValid()
-    self.widget.show()
-    if self.stealFocus:
-        self.web.setFocus()
-        # self.stealFocus = False
-
-
-def loadNote21(self, focusTo=None):
+def loadNote(self, focusTo=None):
     if not self.note:
         return
 
@@ -130,7 +94,7 @@ def onBridge(self, str, _old):
     """Extends the js<->py bridge with our pycmd handler"""
 
     if not str.startswith("frozen"):
-        if anki21 and str.startswith("blur"):
+        if str.startswith("blur"):
             self.lastField = self.currentField  # save old focus
         return _old(self, str)
     if not self.note or not runHook:
@@ -141,9 +105,6 @@ def onBridge(self, str, _old):
     cur = int(txt)
     flds = self.note.model()['flds']
     flds[cur]['sticky'] = not flds[cur]['sticky']
-
-    if not anki21:
-        self.loadNote()
 
 
 def frozenToggle(self, batch=False):
@@ -163,45 +124,25 @@ def frozenToggle(self, batch=False):
             except IndexError:
                 break
 
-    if anki21:
-        self.loadNoteKeepingFocus()
-    else:
-        self.web.eval("saveField('key');")
-        self.loadNote()
+    self.loadNoteKeepingFocus()
 
 
-def onFrozenToggle21(self, batch=False):
+def onFrozenToggle(self, batch=False):
     self.web.evalWithCallback(
         "saveField('key');", lambda _: self.frozenToggle(batch=batch))
 
 
-def onSetupButtons20(self):
-    """Set up hotkeys"""
-    if not isinstance(self.parentWindow, AddCards):  # only modify AddCards Editor
-        return
-
-    QShortcut(QKeySequence(hotkey_toggle_field), self.parentWindow,
-              activated=self.frozenToggle)
-    QShortcut(QKeySequence(hotkey_toggle_all), self.parentWindow,
-              activated=lambda: self.frozenToggle(batch=True))
-
-
-def onSetupShortcuts21(cuts, self):
+def onSetupShortcuts(cuts, self):
     cuts += [(hotkey_toggle_field, self.onFrozenToggle),
              (hotkey_toggle_all, lambda: self.onFrozenToggle(batch=True), True)]
     # third value: enable shortcut even when no field selected
 
 # Add-on hooks, etc.
 
-
-if anki21:
-    addHook("setupEditorShortcuts", onSetupShortcuts21)
+def initializeEditor():
+    addHook("setupEditorShortcuts", onSetupShortcuts)
     Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
-    Editor.loadNote = loadNote21
-    Editor.onFrozenToggle = onFrozenToggle21
-else:
-    addHook("setupEditorButtons", onSetupButtons20)
-    Editor.bridge = wrap(Editor.bridge, onBridge, 'around')
-    Editor.loadNote = loadNote20
+    Editor.loadNote = loadNote
+    Editor.onFrozenToggle = onFrozenToggle
 
-Editor.frozenToggle = frozenToggle
+    Editor.frozenToggle = frozenToggle

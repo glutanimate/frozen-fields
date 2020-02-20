@@ -10,7 +10,6 @@
     "tags": "ui sticky",
     "conflicts": [],
     "targets": [
-        "anki20",
         "anki21"
     ]
 }
