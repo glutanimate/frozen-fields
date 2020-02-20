@@ -96,7 +96,7 @@ Contributions are welcome! Please review the [contribution guidelines](./CONTRIB
 
 *Copyright © 2015-2019 [Aristotelis P.](https://glutanimate.com/) (Glutanimate)*
 
-With code contributions by: [@ankitest](https://github.com/ankitest), [@BlueGreenMagick](https://github.com/BlueGreenMagick) (thanks!)
+With code contributions by: [ankitest](https://github.com/ankitest), [Arthur Milchior](https://github.com/Arthur-Milchior), [BlueGreenMagick](https://github.com/BlueGreenMagick) (thanks!)
 
 The present fork is based on [*Frozen Fields*](https://github.com/tmbb/FrozenFields) by [Tiago Barroso](https://github.com/tmbb). All credit for the original idea and implementation goes to him. Initial work on this fork and the port to Anki 2.1 was made possible thanks to the generous support of a fellow Anki user who would like to remain anonymous.
 
