@@ -2,7 +2,8 @@
 
 # Frozen Fields Add-on for Anki
 #
-# Copyright (C) 2019  Aristotelis P. <https://glutanimate.com/>
+# Copyright (C) 2015-2020  Aristotelis P. <https://glutanimate.com/>
+#                          and contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
