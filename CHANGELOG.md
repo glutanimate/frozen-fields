@@ -17,6 +17,7 @@ If you enjoy Frozen Fields, please consider supporting my work on Patreon, or by
 ### [Download](https://github.com/glutanimate/frozen-fields/releases/tag/v2.1.1)
 
 - Dropped Anki 2.0 builds
+- Improved inter-addon compatibility, e.g. in order to support [Resize images in editor](https://ankiweb.net/shared/info/1103084694) (thanks to [Arthur](https://github.com/Arthur-Milchior/) and [BlueGreenMagick](https://github.com/BlueGreenMagick))
 - Fix a small issue with the latest changes (thanks to Arthur)
 
 ## [2.1.0] - 2020-02-20
