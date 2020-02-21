@@ -12,6 +12,9 @@ If you enjoy Frozen Fields, please consider supporting my work on Patreon, or by
 
 ## [Unreleased]
 
+- Dropped Anki 2.0 builds
+- Fix a small issue with the latest changes (thanks to Arthur)
+
 ## [2.1.0] - 2020-02-20
 
 ### [Download](https://github.com/glutanimate/frozen-fields/releases/tag/v2.1.0)
