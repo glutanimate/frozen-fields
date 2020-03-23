@@ -37,8 +37,7 @@ hotkey_toggle_all = local_conf["hotkeyAll"]
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 with open(os.path.join(__location__, "js.js"), "r") as f:
-          js_code = f.read()
-
+    js_code = f.read()
 
 
 def loadNote(self, focusTo=None):
