@@ -18,7 +18,7 @@ from anki.hooks import addHook, runHook, wrap
 from anki.utils import json
 from aqt import gui_hooks, mw
 from aqt.addcards import AddCards
-from aqt.editor import Editor
+from aqt.editor import Editor, EditorWebView
 from aqt.qt import *
 from aqt.webview import WebContent
 
@@ -41,54 +41,20 @@ __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
-def loadNote(self, focusTo=None):
+def loadNote(self):
     if not self.note:
         return
-
-    data = []
-    for fld, val in list(self.note.items()):
-        data.append((fld, self.mw.col.media.escapeImages(val)))
-    self.widget.show()
-    self.updateTags()
-
-    def oncallback(arg):
-        if not self.note:
-            return
-        self.setupForegroundButton()
-        self.checkValid()
-        if focusTo is not None:
-            self.web.setFocus()
-        try:
-            from aqt import gui_hooks
-            gui_hooks.editor_did_load_note(self)
-        except:
-            runHook("loadNote", self)
-
-    # only modify AddCards Editor
     if not isinstance(self.parentWindow, AddCards):
-        self.web.evalWithCallback("setFields(%s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
-            json.dumps(data),
-            json.dumps(self.fonts()), json.dumps(focusTo),
-            json.dumps(self.note.id)),
-            oncallback)
-    else:
-        iconstr_frozen = self.resourceToData(icon_path_frozen)
-        iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
-        self.web.eval(
-            f"""var hotkey_toggle_field = "{hotkey_toggle_field}";""")
-        self.web.eval(f"""var src_unfrozen = "{iconstr_unfrozen}";""")
-        self.web.eval(f"""var src_frozen = "{iconstr_frozen}";""")
+        return
+    iconstr_frozen = self.resourceToData(icon_path_frozen)
+    iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
+    flds = self.note.model()["flds"]
+    sticky = [fld["sticky"] for fld in flds]
 
-        flds = self.note.model()["flds"]
-        sticky = [fld["sticky"] for fld in flds]
-
-        eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
-            json.dumps(data), json.dumps(sticky),
-            json.dumps(self.fonts()),
-            json.dumps(focusTo),
-            json.dumps(self.note.id))
-
-        self.web.evalWithCallback(eval_calls, oncallback)
+    self.web.eval(f"""var hotkey_toggle_field = "{hotkey_toggle_field}";""")
+    self.web.eval(f"""var src_unfrozen = "{iconstr_unfrozen}";""")
+    self.web.eval(f"""var src_frozen = "{iconstr_frozen}";""")
+    self.web.eval(f"setFrozenFields({json.dumps(sticky)});")
 
 
 def onBridge(self, str, _old):
@@ -140,17 +106,20 @@ def onSetupShortcuts(cuts, self):
 
 # Add-on hooks, etc.
 mw.addonManager.setWebExports(__name__, r".*(css|js)")
+
+
 def on_webview_will_set_content(web_content: WebContent, context):
     if not isinstance(context, Editor) or not isinstance(context.parentWindow, AddCards):
         return
     web_content.js.append(
         f"/_addons/{addon_package}/js.js")
 
+
 gui_hooks.webview_will_set_content.append(on_webview_will_set_content)
 
 addHook("setupEditorShortcuts", onSetupShortcuts)
 Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
-Editor.loadNote = loadNote
+gui_hooks.editor_did_load_note.append(loadNote)
 Editor.onFrozenToggle = onFrozenToggle
 
 Editor.frozenToggle = frozenToggle

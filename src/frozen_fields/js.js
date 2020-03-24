@@ -3,8 +3,7 @@ function onFrozen(elem, idx) {
     pycmd("frozen:" + idx);
     wasFrozen = frozenFields[idx];
     frozenFields[idx] = !wasFrozen;
-    $div = $(elem);
-    $img = $div.find("img");
+    $img = $(elem);
     if (wasFrozen) {
         elem.title = "Freeze field ("+hotkey_toggle_field+")";
         $img.attr("src", src_unfrozen);
@@ -16,39 +15,19 @@ function onFrozen(elem, idx) {
 
 var frozenFields = null;
 
-function setFrozenFields(fields, frozen) {
+function setFrozenFields(frozen) {
     frozenFields = frozen;
-    var txt = "";
-    for (var i=0; i<fields.length; i++) {
-        var n = fields[i][0];
-        var f = fields[i][1];
-        if (!f) {
-            f = "<br>";
+    for (var i=0; i<frozen.length; i++) {
+        var $td_name = $(`#name${i}`);
+        if ($td_name.length == 0) {
+            // no multi column. Get the i-th fname
+            $fnames = $(".fname");
+            var td_name = $fnames[i];
+            $td_name = $(td_name);
         }
-        // ----------- mod start -----------
-        txt += "<tr><td style='width:28px'></td><td class=fname>"+n+"</td></tr><tr>";
-
-        if (frozen[i]) {
-            txt += "<td style='width:28px'><div id=i"+i+" title='Unfreeze field ("+hotkey_toggle_field+")' onclick='onFrozen(this, "+i+");'><img src='"+src_frozen+"'/></div></td>";
-        }
-        else {
-            txt += "<td style='width:28px'><div id=i"+i+" title='Freeze field ("+hotkey_toggle_field+")' onclick='onFrozen(this, "+i+");'><img src='"+src_unfrozen+"'/></div></td>";
-        }
-
-        txt += "<td width=100%%>"
-        // -----------  mod end -----------
-        
-        txt += "<div id=f"+i+" onkeydown='onKey(window.event);' oninput='onInput()' onmouseup='onKey(window.event);'";
-        txt += " onfocus='onFocus(this);' onblur='onBlur();' class='field clearfix' ";
-        txt += "ondragover='onDragOver(this);' onpaste='onPaste(this);' ";
-        txt += "oncopy='onCutOrCopy(this);' oncut='onCutOrCopy(this);' ";
-        txt += "contentEditable=true class=field>"+f+"</div>";
-
-        // -----------  mod end -----------
-
-        txt += "</td></tr>";
+        var src = (frozen[i])?src_frozen:src_unfrozen;
+        var un_freeze = (frozen[i])?"Unfreeze":"Freeze";
+        var div = `<img id=i${i} src='${src}' title='${un_freeze} field (${hotkey_toggle_field})' style="height:.9em" onclick='onFrozen(this, ${i});'/>`;
+        $td_name.prepend(div);
     }
-    $("#fields").html("<table cellpadding=0 width=100%% style='table-layout: fixed;'>" + txt + "</table>");
-    maybeDisableButtons();
 }
-
