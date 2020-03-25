@@ -17,11 +17,11 @@ var frozenFields = null;
 
 function setFrozenFields(frozen) {
     frozenFields = frozen;
+    $fnames = $(".fname");
     for (var i=0; i<frozen.length; i++) {
         var $td_name = $(`#name${i}`);
         if ($td_name.length == 0) {
             // no multi column. Get the i-th fname
-            $fnames = $(".fname");
             var td_name = $fnames[i];
             $td_name = $(td_name);
         }
