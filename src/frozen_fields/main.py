@@ -57,22 +57,22 @@ def loadNote(self):
     self.web.eval(f"setFrozenFields({json.dumps(sticky)});")
 
 
-def onBridge(handled, str, self):
+def onBridge(handled, str, editor):
     """Extends the js<->py bridge with our pycmd handler"""
 
-    if not isinstance(self, Editor) or not isinstance(self.parentWindow, AddCards):
+    if not isinstance(editor, Editor) or not isinstance(editor.parentWindow, AddCards):
         return handled
     if not str.startswith("frozen"):
         if str.startswith("blur"):
-            self.lastField = self.currentField  # save old focus
+            editor.lastField = editor.currentField  # save old focus
         return handled
-    if not self.note or not runHook:
+    if not editor.note or not runHook:
         # shutdown
         return handled
 
     (cmd, txt) = str.split(":", 1)
     cur = int(txt)
-    flds = self.note.model()['flds']
+    flds = editor.note.model()['flds']
     flds[cur]['sticky'] = not flds[cur]['sticky']
     return (True, None)
 
