@@ -1,15 +1,15 @@
-function onFrozen(elem, idx) {
+function onFrozen(idx) {
     wasFrozen = frozenFields[idx];
     pycmd("frozen:" + idx);
     wasFrozen = frozenFields[idx];
     frozenFields[idx] = !wasFrozen;
-    $img = $(elem);
+    $img = $(`#i${idx}`);
     if (wasFrozen) {
-        $img.attr("title", "Freeze field ("+hotkey_toggle_field+")");
         $img.attr("src", src_unfrozen);
+        $img.attr("title", "Freeze field ("+hotkey_toggle_field+")");
     } else {
-        $img.attr("title", "Unfreeze field ("+hotkey_toggle_field+")");
         $img.attr("src", src_frozen);
+        $img.attr("title", "Unfreeze field ("+hotkey_toggle_field+")");
     }
 }
 
@@ -27,7 +27,7 @@ function setFrozenFields(frozen) {
         }
         var src = (frozen[i])?src_frozen:src_unfrozen;
         var un_freeze = (frozen[i])?"Unfreeze":"Freeze";
-        var div = `<img id=i${i} src='${src}' title='${un_freeze} field (${hotkey_toggle_field})' style="height:.9em" onclick='onFrozen(this, ${i});'/>`;
+        var div = `<img id=i${i} src='${src}' title='${un_freeze} field (${hotkey_toggle_field})' style="height:.9em" onclick='onFrozen(${i});'/>`;
         $td_name.prepend(div);
     }
 }
