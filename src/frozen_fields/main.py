@@ -42,39 +42,6 @@ with open(os.path.join(__location__, "js21.js"), "r") as f:
           js_code_21 = f.read()
 
 
-def loadNote20(self):
-    """Modified loadNote(), adds buttons to Editor"""
-    if not self.note:
-        return
-    if self.stealFocus:
-        field = self.currentField
-    else:
-        field = -1
-    if not self._loaded:
-        # will be loaded when page is ready
-        return
-    data = []
-    for fld, val in self.note.items():
-        data.append((fld, self.mw.col.media.escapeImages(val)))
-    ###### ↓modified #########
-    if isinstance(self.parentWindow, AddCards):  # only modify AddCards Editor
-        flds = self.note.model()["flds"]
-        sticky = [fld["sticky"] for fld in flds]
-        self.web.eval(js_code_20)
-        self.web.eval("setFrozenFields(%s, %s, %d);" % (
-            json.dumps(data), json.dumps(sticky), field))
-    else:
-        self.web.eval("setFields(%s, %d);" % (
-            json.dumps(data), field))
-    ###########################
-    self.web.eval("setFonts(%s);" % (
-        json.dumps(self.fonts())))
-    self.checkValid()
-    self.widget.show()
-    if self.stealFocus:
-        self.web.setFocus()
-        # self.stealFocus = False
-
 
 def loadNote21(self, focusTo=None):
     if not self.note:
