@@ -130,7 +130,7 @@ def onBridge(self, str, _old):
     """Extends the js<->py bridge with our pycmd handler"""
 
     if not str.startswith("frozen"):
-        if anki21 and str.startswith("blur"):
+        if str.startswith("blur"):
             self.lastField = self.currentField  # save old focus
         return _old(self, str)
     if not self.note or not runHook:
@@ -141,9 +141,6 @@ def onBridge(self, str, _old):
     cur = int(txt)
     flds = self.note.model()['flds']
     flds[cur]['sticky'] = not flds[cur]['sticky']
-
-    if not anki21:
-        self.loadNote()
 
 
 def frozenToggle(self, batch=False):
