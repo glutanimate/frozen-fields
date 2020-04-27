@@ -125,11 +125,7 @@ def frozenToggle(self, batch=False):
             except IndexError:
                 break
 
-    if anki21:
-        self.loadNoteKeepingFocus()
-    else:
-        self.web.eval("saveField('key');")
-        self.loadNote()
+    self.loadNoteKeepingFocus()
 
 
 def onFrozenToggle21(self, batch=False):
