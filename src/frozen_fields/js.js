@@ -5,10 +5,10 @@ function onFrozen(elem, idx) {
     frozenFields[idx] = !wasFrozen;
     $img = $(elem);
     if (wasFrozen) {
-        elem.title = "Freeze field ("+hotkey_toggle_field+")";
+        $img.attr("title", "Freeze field ("+hotkey_toggle_field+")");
         $img.attr("src", src_unfrozen);
     } else {
-        elem.title = "Unfreeze field ("+hotkey_toggle_field+")";
+        $img.attr("title", "Unfreeze field ("+hotkey_toggle_field+")");
         $img.attr("src", src_frozen);
     }
 }
