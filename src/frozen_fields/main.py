@@ -194,14 +194,9 @@ def onSetupShortcuts21(cuts, self):
 # Add-on hooks, etc.
 
 
-if anki21:
-    addHook("setupEditorShortcuts", onSetupShortcuts21)
-    Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
-    Editor.loadNote = loadNote21
-    Editor.onFrozenToggle = onFrozenToggle21
-else:
-    addHook("setupEditorButtons", onSetupButtons20)
-    Editor.bridge = wrap(Editor.bridge, onBridge, 'around')
-    Editor.loadNote = loadNote20
+addHook("setupEditorShortcuts", onSetupShortcuts21)
+Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
+Editor.loadNote = loadNote21
+Editor.onFrozenToggle = onFrozenToggle21
 
 Editor.frozenToggle = frozenToggle
