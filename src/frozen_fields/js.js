@@ -14,10 +14,6 @@ function onFrozen(elem, idx) {
     }
 }
 
-var hotkey_toggle_field = "%s";
-var src_frozen = "%s";
-var src_unfrozen = "%s";
-
 var frozenFields = null;
 
 function setFrozenFields(fields, frozen) {

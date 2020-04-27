@@ -16,14 +16,17 @@ import os
 
 from anki.hooks import addHook, runHook, wrap
 from anki.utils import json
+from aqt import gui_hooks, mw
 from aqt.addcards import AddCards
 from aqt.editor import Editor
 from aqt.qt import *
+from aqt.webview import WebContent
 
 from .config import local_conf
 from .consts import *
 
 icon_path = os.path.join(addon_path, "icons")
+addon_package = mw.addonManager.addonFromModule(__name__)
 
 icon_path_frozen = os.path.join(icon_path, "frozen.png")
 icon_path_unfrozen = os.path.join(icon_path, "unfrozen.png")
@@ -36,8 +39,6 @@ hotkey_toggle_all = local_conf["hotkeyAll"]
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
-with open(os.path.join(__location__, "js.js"), "r") as f:
-    js_code = f.read()
 
 
 def loadNote(self, focusTo=None):
@@ -73,12 +74,13 @@ def loadNote(self, focusTo=None):
     else:
         iconstr_frozen = self.resourceToData(icon_path_frozen)
         iconstr_unfrozen = self.resourceToData(icon_path_unfrozen)
+        self.web.eval(
+            f"""var hotkey_toggle_field = "{hotkey_toggle_field}";""")
+        self.web.eval(f"""var src_unfrozen = "{iconstr_unfrozen}";""")
+        self.web.eval(f"""var src_frozen = "{iconstr_frozen}";""")
 
         flds = self.note.model()["flds"]
         sticky = [fld["sticky"] for fld in flds]
-
-        eval_definitions = js_code % (hotkey_toggle_field, iconstr_frozen,
-                                         iconstr_unfrozen)
 
         eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
             json.dumps(data), json.dumps(sticky),
@@ -86,7 +88,6 @@ def loadNote(self, focusTo=None):
             json.dumps(focusTo),
             json.dumps(self.note.id))
 
-        self.web.eval(eval_definitions)
         self.web.evalWithCallback(eval_calls, oncallback)
 
 
@@ -138,7 +139,14 @@ def onSetupShortcuts(cuts, self):
     # third value: enable shortcut even when no field selected
 
 # Add-on hooks, etc.
+mw.addonManager.setWebExports(__name__, r".*(css|js)")
+def on_webview_will_set_content(web_content: WebContent, context):
+    if not isinstance(context, Editor) or not isinstance(context.parentWindow, AddCards):
+        return
+    web_content.js.append(
+        f"/_addons/{addon_package}/js.js")
 
+gui_hooks.webview_will_set_content.append(on_webview_will_set_content)
 
 addHook("setupEditorShortcuts", onSetupShortcuts)
 Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
