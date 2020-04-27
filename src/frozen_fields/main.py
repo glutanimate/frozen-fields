@@ -36,12 +36,12 @@ hotkey_toggle_all = local_conf["hotkeyAll"]
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
-with open(os.path.join(__location__, "js21.js"), "r") as f:
-          js_code_21 = f.read()
+with open(os.path.join(__location__, "js.js"), "r") as f:
+          js_code = f.read()
 
 
 
-def loadNote21(self, focusTo=None):
+def loadNote(self, focusTo=None):
     if not self.note:
         return
 
@@ -78,7 +78,7 @@ def loadNote21(self, focusTo=None):
         flds = self.note.model()["flds"]
         sticky = [fld["sticky"] for fld in flds]
 
-        eval_definitions = js_code_21 % (hotkey_toggle_field, iconstr_frozen,
+        eval_definitions = js_code % (hotkey_toggle_field, iconstr_frozen,
                                          iconstr_unfrozen)
 
         eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
@@ -128,12 +128,12 @@ def frozenToggle(self, batch=False):
     self.loadNoteKeepingFocus()
 
 
-def onFrozenToggle21(self, batch=False):
+def onFrozenToggle(self, batch=False):
     self.web.evalWithCallback(
         "saveField('key');", lambda _: self.frozenToggle(batch=batch))
 
 
-def onSetupShortcuts21(cuts, self):
+def onSetupShortcuts(cuts, self):
     cuts += [(hotkey_toggle_field, self.onFrozenToggle),
              (hotkey_toggle_all, lambda: self.onFrozenToggle(batch=True), True)]
     # third value: enable shortcut even when no field selected
@@ -141,9 +141,9 @@ def onSetupShortcuts21(cuts, self):
 # Add-on hooks, etc.
 
 
-addHook("setupEditorShortcuts", onSetupShortcuts21)
+addHook("setupEditorShortcuts", onSetupShortcuts)
 Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
-Editor.loadNote = loadNote21
-Editor.onFrozenToggle = onFrozenToggle21
+Editor.loadNote = loadNote
+Editor.onFrozenToggle = onFrozenToggle
 
 Editor.frozenToggle = frozenToggle
