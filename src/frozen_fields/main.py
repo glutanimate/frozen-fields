@@ -36,8 +36,6 @@ hotkey_toggle_all = local_conf["hotkeyAll"]
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
-with open(os.path.join(__location__, "js20.js"), "r") as f:
-          js_code_20 = f.read() % (hotkey_toggle_field, icon_frozen, hotkey_toggle_field, icon_unfrozen)
 with open(os.path.join(__location__, "js21.js"), "r") as f:
           js_code_21 = f.read()
 
