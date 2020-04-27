@@ -133,17 +133,6 @@ def onFrozenToggle21(self, batch=False):
         "saveField('key');", lambda _: self.frozenToggle(batch=batch))
 
 
-def onSetupButtons20(self):
-    """Set up hotkeys"""
-    if not isinstance(self.parentWindow, AddCards):  # only modify AddCards Editor
-        return
-
-    QShortcut(QKeySequence(hotkey_toggle_field), self.parentWindow,
-              activated=self.frozenToggle)
-    QShortcut(QKeySequence(hotkey_toggle_all), self.parentWindow,
-              activated=lambda: self.frozenToggle(batch=True))
-
-
 def onSetupShortcuts21(cuts, self):
     cuts += [(hotkey_toggle_field, self.onFrozenToggle),
              (hotkey_toggle_all, lambda: self.onFrozenToggle(batch=True), True)]
