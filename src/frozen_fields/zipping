@@ -1,0 +1,2 @@
+rm ff.ankiaddon
+zip -r ff.ankiaddon icons config.* *.ui *.sh *.py *.css manifest.* *.js web  LICENSE *.md zipping --exclude \*~ \*zip ankiweb
