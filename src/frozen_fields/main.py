@@ -120,7 +120,7 @@ def on_webview_will_set_content(web_content: WebContent, context):
 
 gui_hooks.webview_will_set_content.append(on_webview_will_set_content)
 
-addHook("setupEditorShortcuts", onSetupShortcuts)
+gui_hooks.editor_did_init_shortcuts.append(onSetupShortcuts)
 gui_hooks.webview_did_receive_js_message.append(onBridge)
 gui_hooks.editor_did_load_note.append(loadNote)
 Editor.onFrozenToggle = onFrozenToggle
