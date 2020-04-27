@@ -77,29 +77,15 @@ def onBridge(handled, str, editor):
     return (True, None)
 
 
-def frozenToggle(self, batch=False):
-    """Toggle state of current field"""
-
-    flds = self.note.model()['flds']
-    cur = self.currentField
-    if cur is None:
-        cur = 0
-    is_sticky = flds[cur]["sticky"]
-    if not batch:
-        flds[cur]["sticky"] = not is_sticky
-    else:
-        for n in range(len(self.note.fields)):
-            try:
-                flds[n]['sticky'] = not is_sticky
-            except IndexError:
-                break
-
-    self.loadNoteKeepingFocus()
-
-
 def onFrozenToggle(self, batch=False):
-    self.web.evalWithCallback(
-        "saveField('key');", lambda _: self.frozenToggle(batch=batch))
+    if batch:
+        if self.note is None:
+            return
+        for i in range(len(self.note.fields)):
+            self.web.eval(f"""onFrozen({i})""");
+    else:
+        if self.currentField is not None:
+            self.web.eval(f"""onFrozen({self.currentField})""");
 
 
 def onSetupShortcuts(cuts, self):
@@ -125,4 +111,3 @@ gui_hooks.webview_did_receive_js_message.append(onBridge)
 gui_hooks.editor_did_load_note.append(loadNote)
 Editor.onFrozenToggle = onFrozenToggle
 
-Editor.frozenToggle = frozenToggle
