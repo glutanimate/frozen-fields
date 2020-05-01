@@ -24,11 +24,9 @@ function setFrozenFields(frozen) {
         var un_freeze = (frozen[i])?"Unfreeze":"Freeze";
         var img = `<td style="width:28px"><img id=i${i} src='${src}' title='${un_freeze} field (${hotkey_toggle_field})' onclick='onFrozen(${i});'/></td>`;
         $td_field = $div_field.parent();
-        $tr_field = $td_field.parent();
-        $tr_field.prepend(img);
+        $td_field.before(img);
 
         var $td_name = $(`#name${i}`);
-        var $tr_name = $td_name.parent();
-        $tr_name.prepend("<td style='width:28px'></td>");
+        $td_name.before("<td style='width:28px'></td>");
     }
 }
