@@ -35,6 +35,11 @@ function setFrozenFields(frozen) {
         $td_field.before(img);
 
         var $td_name = $(`#name${i}`);
+        var colspan = $td_name.attr("colspan");
+        if (colspan == undefined) {
+            colspan = 1;
+        }
+        $td_name.attr("colspan", colspan * 2 - 1);
         $td_name.before("<td style='width:28px'></td>");
     }
 }
