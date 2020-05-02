@@ -24,6 +24,14 @@ function setFrozenFields(frozen) {
         var un_freeze = (frozen[i])?"Unfreeze":"Freeze";
         var img = `<td style="width:28px"><img id=i${i} src='${src}' title='${un_freeze} field (${hotkey_toggle_field})' onclick='onFrozen(${i});'/></td>`;
         $td_field = $div_field.parent();
+        var colspan = $td_field.attr("colspan");
+        if (colspan == undefined) {
+            colspan = 1;
+        }
+        // Each field normally uses twice as much column than before
+        // So we double the number of column for this field, and
+        // remove one column that we reserve for the ice.
+        $td_field.attr("colspan", colspan * 2 - 1);
         $td_field.before(img);
 
         var $td_name = $(`#name${i}`);
