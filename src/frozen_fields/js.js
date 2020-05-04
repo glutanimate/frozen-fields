@@ -19,28 +19,37 @@ function setFrozenFields(frozen) {
     frozenFields = frozen;
     $fnames = $(".fname");
     for (var i=0; i<frozen.length; i++) {
-        var $div_field = $(`#f${i}`);
         var src = (frozen[i])?src_frozen:src_unfrozen;
         var un_freeze = (frozen[i])?"Unfreeze":"Freeze";
         var img = `<img id=i${i} src='${src}' title='${un_freeze} field (${hotkey_toggle_field})' onclick='onFrozen(${i});'/>`
-        var td_img = `<td style="width:28px" id="frozen${i}">${img}</td>`;
-        $td_field = $div_field.parent();
-        var colspan = $td_field.attr("colspan");
-        if (colspan == undefined) {
-            colspan = 1;
-        }
-        // Each field normally uses twice as much column than before
-        // So we double the number of column for this field, and
-        // remove one column that we reserve for the ice.
-        $td_field.attr("colspan", colspan * 2 - 1);
-        $td_field.before(td_img);
 
-        var $td_name = $(`#name${i}`);
-        var colspan = $td_name.attr("colspan");
-        if (colspan == undefined) {
-            colspan = 1;
+        // Change the current stars if they are already loaded.
+        // It may be the case if callbacks delayed "setFrozenFields" so much that we got the one created for the previous card.
+        // We may still need to change the stars, because it's possible that we got informations for a previous note type.
+        var $td_img = $(`#frozen${i}`);
+        if ($td_img.size() == 0) {
+            var $div_field = $(`#f${i}`);
+            var td_img = `<td style="width:28px" id="frozen${i}">${img}</td>`;
+            $td_field = $div_field.parent();
+            var colspan = $td_field.attr("colspan");
+            if (colspan == undefined) {
+                colspan = 1;
+            }
+            // Each field normally uses twice as much column than before
+            // So we double the number of column for this field, and
+            // remove one column that we reserve for the ice.
+            $td_field.attr("colspan", colspan * 2 - 1);
+            $td_field.before(td_img);
+
+            var $td_name = $(`#name${i}`);
+            var colspan = $td_name.attr("colspan");
+            if (colspan == undefined) {
+                colspan = 1;
+            }
+            $td_name.attr("colspan", colspan * 2 - 1);
+            $td_name.before("<td style='width:28px'></td>");
+        } else {
+            $td_img.html(img);
         }
-        $td_name.attr("colspan", colspan * 2 - 1);
-        $td_name.before("<td style='width:28px'></td>");
     }
 }
