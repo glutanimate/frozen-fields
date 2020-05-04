@@ -23,7 +23,7 @@ function setFrozenFields(frozen) {
         var src = (frozen[i])?src_frozen:src_unfrozen;
         var un_freeze = (frozen[i])?"Unfreeze":"Freeze";
         var img = `<img id=i${i} src='${src}' title='${un_freeze} field (${hotkey_toggle_field})' onclick='onFrozen(${i});'/>`
-        var td_img = `<td style="width:28px">${img}</td>`;
+        var td_img = `<td style="width:28px" id="frozen${i}">${img}</td>`;
         $td_field = $div_field.parent();
         var colspan = $td_field.attr("colspan");
         if (colspan == undefined) {
