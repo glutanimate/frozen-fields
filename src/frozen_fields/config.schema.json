@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "",
+  "properties": {
+    "hotkeyOne": {
+      "type": "string",
+      "title": "One field",
+      "description": "Shortcut to (un)freeze the field having the cursor",
+      "pattern": "^((([Cc][Tt][Rr][Ll]|[Aa][Ll][Tt]|[Ss][Hh][Ii][Ff][Tt])\\+){0,3}([a-zA-Z0-9]|F[1-9]|F1[0-2]))?$",
+      "default": "F9"
+     },
+    "hotkeyAll": {
+      "type": "string",
+      "title": "All fields",
+      "description": "Shortcut to (un)freeze all of the fields.",
+      "pattern": "^((([Cc][Tt][Rr][Ll]|[Aa][Ll][Tt]|[Ss][Hh][Ii][Ff][Tt])\\+){0,3}([a-zA-Z0-9]|F[1-9]|F1[0-2]))?$",
+      "default": "Shift+F9"
+     }
+  }
+}
+
