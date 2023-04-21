@@ -33,6 +33,7 @@ icon_unfrozen = QUrl.fromLocalFile(icon_path_unfrozen).toString()
 
 hotkey_toggle_field = local_conf["hotkeyOne"]
 hotkey_toggle_all = local_conf["hotkeyAll"]
+remove_clozes_from_frozen_fields=bool(local_conf["removeClozesInFrozenFields"])
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -82,6 +83,10 @@ def loadNote21(self, focusTo=None):
 
     data = []
     for fld, val in list(self.note.items()):
+        if remove_clozes_from_frozen_fields:
+            for i in range(100):
+                val=find_clozed_expressions(val,i)
+    
         data.append((fld, self.mw.col.media.escapeImages(val)))
     self.widget.show()
     self.updateTags()
@@ -124,6 +129,7 @@ def loadNote21(self, focusTo=None):
 
         self.web.eval(eval_definitions)
         self.web.evalWithCallback(eval_calls, oncallback)
+    
 
 
 def onBridge(self, str, _old):
@@ -190,6 +196,58 @@ def onSetupShortcuts21(cuts, self):
     cuts += [(hotkey_toggle_field, self.onFrozenToggle),
              (hotkey_toggle_all, lambda: self.onFrozenToggle(batch=True), True)]
     # third value: enable shortcut even when no field selected
+
+
+def find_clozed_expressions(s:str,n:int):
+    """removes the cloze {{cn:: ___ }} from string"""
+    compare_string="c" + str(n) +"::"
+    i=0
+    counter=0
+    destroy_set=set()
+
+    two_digits=n>=10
+    
+    while True:
+        try:
+            buffer_string=str(s[i])+str(s[i+1])
+            if buffer_string=="{{":
+                if two_digits:
+                    check_string=s[i+2]+s[i+3]+s[i+4]+s[i+5]+s[i+6]
+                    #check_string=cxy::
+                else:
+                    check_string=s[i+2]+s[i+3]+s[i+4]+s[i+5]
+                    #check_string=cx::
+                try:
+                    if check_string==compare_string:
+                        if counter==0:
+                            #add to counter 
+                            #add indices of characters which get destroyed
+                            destroy_set.add(i)
+                            destroy_set.add(i+1)
+                            destroy_set.add(i+2)
+                            destroy_set.add(i+3)
+                            destroy_set.add(i+4)
+                            destroy_set.add(i+5)
+                            if two_digits:
+                                destroy_set.add(i+6)
+                            counter+=1
+                    elif counter!=0:
+                        counter+=1
+                except IndexError:
+                    pass
+            if buffer_string=="}}":
+                old_counter=counter
+                counter=max(counter-1,0)
+                if counter==0 and old_counter!=counter:
+                    destroy_set.add(i)
+                    destroy_set.add(i+1)
+        except IndexError:
+            break
+        i+=1
+    return_list=[str(char) for i,char in enumerate(s) if i not in destroy_set]
+    return_string="".join(return_list)
+    return return_string
+
 
 # Add-on hooks, etc.
 
