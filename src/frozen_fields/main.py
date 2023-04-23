@@ -82,12 +82,15 @@ def loadNote21(self, focusTo=None):
         return
 
     data = []
+    data2 = []
     for fld, val in list(self.note.items()):
         if remove_clozes_from_frozen_fields:
+            val2=val
             for i in range(100):
-                val=find_clozed_expressions(val,i)
+                val2=find_clozed_expressions(val2,i)
     
         data.append((fld, self.mw.col.media.escapeImages(val)))
+        data2.append((fld, self.mw.col.media.escapeImages(val2)))
     self.widget.show()
     self.updateTags()
 
@@ -122,7 +125,7 @@ def loadNote21(self, focusTo=None):
                                          iconstr_unfrozen)
 
         eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
-            json.dumps(data), json.dumps(sticky),
+            json.dumps(data2), json.dumps(sticky),
             json.dumps(self.fonts()),
             json.dumps(focusTo),
             json.dumps(self.note.id))
