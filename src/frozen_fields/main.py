@@ -33,7 +33,7 @@ icon_unfrozen = QUrl.fromLocalFile(icon_path_unfrozen).toString()
 
 hotkey_toggle_field = local_conf["hotkeyOne"]
 hotkey_toggle_all = local_conf["hotkeyAll"]
-remove_clozes_from_frozen_fields=bool(local_conf["removeClozesInFrozenFields"])
+remove_clozes_from_frozen_fields_option=bool(local_conf["removeClozesInFrozenFields"])
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -77,20 +77,20 @@ def loadNote20(self):
         # self.stealFocus = False
 
 
-def loadNote21(self, focusTo=None):
+def loadNote21(self, focusTo=None,clean_clozes_argument=True):
     if not self.note:
         return
 
     data = []
-    data2 = []
+    data_copy = []
     for fld, val in list(self.note.items()):
-        if remove_clozes_from_frozen_fields:
-            val2=val
+        val_copy=val
+        if remove_clozes_from_frozen_fields_option and clean_clozes_argument:
             for i in range(100):
-                val2=find_clozed_expressions(val2,i)
-    
+                val_copy=find_clozed_expressions(val_copy,i)
+
+        data_copy.append((fld, self.mw.col.media.escapeImages(val_copy)))
         data.append((fld, self.mw.col.media.escapeImages(val)))
-        data2.append((fld, self.mw.col.media.escapeImages(val2)))
     self.widget.show()
     self.updateTags()
 
@@ -125,7 +125,7 @@ def loadNote21(self, focusTo=None):
                                          iconstr_unfrozen)
 
         eval_calls = "setFrozenFields(%s, %s); setFonts(%s); focusField(%s); setNoteId(%s)" % (
-            json.dumps(data2), json.dumps(sticky),
+            json.dumps(data_copy), json.dumps(sticky),
             json.dumps(self.fonts()),
             json.dumps(focusTo),
             json.dumps(self.note.id))
@@ -173,7 +173,7 @@ def frozenToggle(self, batch=False):
                 break
 
     if anki21:
-        self.loadNoteKeepingFocus()
+        self.loadNoteKeepingFocus(clean_clozes_argument=False)
     else:
         self.web.eval("saveField('key');")
         self.loadNote()
@@ -199,6 +199,9 @@ def onSetupShortcuts21(cuts, self):
     cuts += [(hotkey_toggle_field, self.onFrozenToggle),
              (hotkey_toggle_all, lambda: self.onFrozenToggle(batch=True), True)]
     # third value: enable shortcut even when no field selected
+
+def loadNoteKeepingFocus(self,clean_clozes_argument=True) -> None:
+    self.loadNote(self.currentField,clean_clozes_argument=clean_clozes_argument)
 
 
 def find_clozed_expressions(s:str,n:int):
@@ -258,11 +261,13 @@ def find_clozed_expressions(s:str,n:int):
 if anki21:
     addHook("setupEditorShortcuts", onSetupShortcuts21)
     Editor.onBridgeCmd = wrap(Editor.onBridgeCmd, onBridge, "around")
+    Editor.loadNoteKeepingFocus = loadNoteKeepingFocus
     Editor.loadNote = loadNote21
     Editor.onFrozenToggle = onFrozenToggle21
 else:
     addHook("setupEditorButtons", onSetupButtons20)
     Editor.bridge = wrap(Editor.bridge, onBridge, 'around')
+    Editor.loadNoteKeepingFocus = loadNoteKeepingFocus
     Editor.loadNote = loadNote20
 
 Editor.frozenToggle = frozenToggle
